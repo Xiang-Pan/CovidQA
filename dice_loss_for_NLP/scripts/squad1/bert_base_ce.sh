@@ -7,7 +7,7 @@
 REPO_PATH=$(pwd)
 export PYTHONPATH="$PYTHONPATH:$REPO_PATH"
 
-DATA_DIR=$REPO_PATH/datasets/squad1
+DATA_DIR=$REPO_PATH/datasets/covidqa
 BERT_DIR=$REPO_PATH/cached_models/bert-base-uncased
 
 

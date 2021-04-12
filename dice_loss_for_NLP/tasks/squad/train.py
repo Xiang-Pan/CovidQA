@@ -314,6 +314,7 @@ class BertForQA(pl.LightningModule):
             dataset = TruncateDataset(dataset, limit)
         if prefix == "train":
             # define data_generator will help experiment reproducibility.
+            
             data_generator = torch.Generator()
             data_generator.manual_seed(self.args.seed)
             data_sampler = RandomSampler(dataset, generator=data_generator)
