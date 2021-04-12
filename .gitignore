@@ -4,6 +4,7 @@
 **/cache
 # python cache
 # dice_loss_for_NLP/datasets/squad1
+outputs/
 **/__pycache__/
 
 **/cached_*
