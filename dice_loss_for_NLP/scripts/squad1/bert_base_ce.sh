@@ -2,7 +2,8 @@
 # -*- coding: utf-8 -*-
 
 
-REPO_PATH=/home/xiangpan/Labs/CovidQA/dice_loss_for_NLP
+# REPO_PATH=/home/xiangpan/Labs/CovidQA/dice_loss_for_NLP
+REPO_PATH=$(pwd)
 export PYTHONPATH="$PYTHONPATH:$REPO_PATH"
 
 DATA_DIR=$REPO_PATH/datasets/squad1
@@ -38,7 +39,7 @@ CACHE_DIR=${OUTPUT_DIR}/cache
 mkdir -p ${CACHE_DIR}
 
 python ${REPO_PATH}/tasks/squad/train.py \
---gpus="1" \
+--gpus="0,1,2,3" \
 --precision=${PRECISION} \
 --train_batch_size ${TRAIN_BATCH_SIZE} \
 --progress_bar_refresh_rate ${PROGRESS_BAR} \

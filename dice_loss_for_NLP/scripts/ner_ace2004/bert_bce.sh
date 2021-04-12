@@ -2,7 +2,9 @@
 # -*- coding: utf-8 -*-
 
 FILE_NAME=brain_enonto_dice
-REPO_PATH=/home/xiangpan/Labs/CovidQA/dice_loss_for_NLP
+# REPO_PATH=/home/xiangpan/Labs/CovidQA/dice_loss_for_NLP
+REPO_PATH=$(pwd)
+echo $REPO_PATH
 MODEL_SCALE=base
 DATA_DIR=$REPO_PATH/datasets/ace2004
 BERT_DIR=$REPO_PATH/cached_models/bert-base-uncased
