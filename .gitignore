@@ -3,8 +3,11 @@
 **/cached_models
 **/cache
 # python cache
-dice_loss_for_NLP/datasets/squad1
+# dice_loss_for_NLP/datasets/squad1
 **/__pycache__/
+
+**/cached_*
+dice_loss_for_NLP/datasets/squad1/SQuAD-explorer
 
 # mac cache
 ._.DS_Store
