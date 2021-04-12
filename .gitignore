@@ -2,8 +2,8 @@
 # model cache
 **/cached_models
 **/cache
-**/datasets
 # python cache
+dice_loss_for_NLP/datasets/squad1
 **/__pycache__/
 
 # mac cache
