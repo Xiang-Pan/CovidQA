@@ -1,12 +1,11 @@
 #!/usr/bin/env bash
 # -*- coding: utf-8 -*-
 
-
 FILE_NAME=brain_enonto_dice
-REPO_PATH=/userhome/xiaoya/mrc-with-dice-loss
+REPO_PATH=/home/xiangpan/Labs/CovidQA/dice_loss_for_NLP
 MODEL_SCALE=base
-DATA_DIR=/userhome/xiaoya/dataset/new_mrc_ner/new_en_onto5
-BERT_DIR=/userhome/xiaoya/bert/bert_cased_large
+DATA_DIR=$REPO_PATH/dataset/new_mrc_ner/new_en_onto5
+BERT_DIR=$REPO_PATH/cached_models/bert-base-uncased
 
 TRAIN_BATCH_SIZE=12
 EVAL_BATCH_SIZE=1
