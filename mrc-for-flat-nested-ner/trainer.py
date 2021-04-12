@@ -360,8 +360,7 @@ def main():
 
     model = BertLabeling(args)
     if args.pretrained_checkpoint:
-        model.load_state_dict(torch.load(args.pretrained_checkpoint,
-                                         map_location=torch.device('cpu'))["state_dict"])
+        model.load_state_dict(torch.load(args.pretrained_checkpoint,map_location=torch.device('cpu'))["state_dict"])
 
     checkpoint_callback = ModelCheckpoint(
         dirpath=args.default_root_dir,

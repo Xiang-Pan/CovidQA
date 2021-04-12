@@ -3,10 +3,13 @@
 
 TIME=2021.02.02
 FILE_NAME=debug_onto4
-REPO_PATH=/data/xiaoya/workspace/mrc-with-dice-loss
+REPO_PATH=/home/xiangpan/Labs/CovidQA/dice_loss_for_NLP
+# REPO_PATH=/data/xiaoya/workspace/mrc-with-dice-loss
 MODEL_SCALE=base
-DATA_DIR=/data/nfsdata2/xiaoya/mrc_ner/zh_onto4
-BERT_DIR=/data/xiaoya/pretrain_lm/chinese_L-12_H-768_A-12
+# DATA_DIR=/data/nfsdata2/xiaoya/mrc_ner/zh_onto4
+# BERT_DIR=/data/xiaoya/pretrain_lm/chinese_L-12_H-768_A-12
+DATA_DIR=$REPO_PATH/datasets/zh_msra
+BERT_DIR=$REPO_PATH/cached_models/bert-base-uncased
 
 TRAIN_BATCH_SIZE=5
 EVAL_BATCH_SIZE=12
@@ -46,12 +49,13 @@ elif [[ ${LOSS_TYPE} == "dice" ]]; then
 fi
 echo "DEBUG INFO -> loss sign is ${LOSS_SIGN}"
 
-OUTPUT_BASE_DIR=/data/xiaoya/outputs/dice_loss/mrc_ner/${TIME}
+OUTPUT_BASE_DIR=$REPO_PATH/outputs/dice_loss/mrc_ner/${TIME}
 OUTPUT_DIR=${OUTPUT_BASE_DIR}/${FILE_NAME}_${MODEL_SCALE}_${TRAIN_BATCH_SIZE}_${MAX_LENGTH}_${LR}_${LR_SCHEDULE}_${BERT_DROPOUT}_${ACC_GRAD}_${MAX_EPOCH}_${GRAD_CLIP}_${WEIGHT_DECAY}_${WARMUP_PROPORTION}_${W_START}_${W_END}_${W_SPAN}_${LOSS_SIGN}
 
 mkdir -p ${OUTPUT_DIR}
 
-CUDA_VISIBLE_DEVICES=3 python ${REPO_PATH}/tasks/mrc_ner/train.py \
+# CUDA_VISIBLE_DEVICES=0 
+python ${REPO_PATH}/tasks/mrc_ner/train.py \
 --gpus="1" \
 --precision=${PRECISION} \
 --train_batch_size ${TRAIN_BATCH_SIZE} \
@@ -84,4 +88,5 @@ CUDA_VISIBLE_DEVICES=3 python ${REPO_PATH}/tasks/mrc_ner/train.py \
 --span_loss_candidates all \
 --do_lower_case \
 --is_chinese \
---flat_ner
+--data_sign zh_msra
+# --flat_ner

@@ -342,7 +342,7 @@ def main():
     if len(args.pretrained_checkpoint) > 1:
         model.load_state_dict(torch.load(args.pretrained_checkpoint,map_location=torch.device('cpu'))["state_dict"])
 
-    print(args.output_dir)
+    # print(args.output_dir)
     checkpoint_callback = ModelCheckpoint(
         dirpath=args.output_dir,
         filename='{epoch}-{val_loss:.2f}',

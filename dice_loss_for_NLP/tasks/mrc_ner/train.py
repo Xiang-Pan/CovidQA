@@ -10,6 +10,7 @@ import argparse
 import logging
 from collections import namedtuple
 from utils.random_seed import set_random_seed
+from tokenizers import BertWordPieceTokenizer
 set_random_seed(2333)
 
 import torch
@@ -124,6 +125,7 @@ class BertForNERTask(pl.LightningModule):
                                           eps=self.args.adam_epsilon,
                                           weight_decay=self.args.weight_decay)
         num_gpus = len([x for x in str(self.args.gpus).split(",") if x.strip()])
+
         steps_per_batch = (len(self.train_dataloader()) // (self.args.accumulate_grad_batches * num_gpus) + 1)
         t_total = steps_per_batch * self.args.max_epochs
         self.total_steps = t_total
@@ -446,15 +448,24 @@ class BertForNERTask(pl.LightningModule):
 
     def get_dataloader(self, prefix="train", limit: int = None):
         json_path = os.path.join(self.data_dir, f"mrc-ner.{prefix}")
+        vocab_path = os.path.join(self.model_path, "vocab.txt")
+        print(self.args.data_sign)
         dataset = MRCNERDataset(json_path=json_path,
                                 tokenizer=self.tokenizer,
                                 max_length=self.args.max_length,
                                 possible_only=self.args.answerable_only,
                                 is_chinese=self.args.is_chinese,
-                                pad_to_maxlen=False, negative_sampling=self.args.negative_sampling,
+                                pad_to_maxlen=False, 
+                                negative_sampling=self.args.negative_sampling,
                                 prefix=prefix, data_sign=self.args.data_sign,
                                 do_lower_case=self.args.do_lower_case,
                                 pred_answerable=self.args.pred_answerable)
+        # dataset = MRCNERDataset(json_path=json_path,
+        #                 tokenizer=BertWordPieceTokenizer(vocab_path),
+        #                 max_length=self.args.max_length,
+        #                 is_chinese=self.args.is_chinese,
+        #                 pad_to_maxlen=False
+        #                 )
 
         if limit is not None:
             dataset = TruncateDataset(dataset, limit)
@@ -511,15 +522,14 @@ def main():
     parser = BertForNERTask.add_model_specific_args(parser)
     parser = Trainer.add_argparse_args(parser)
     args = parser.parse_args()
-
+    print()
     task_model = BertForNERTask(args)
 
     if len(args.pretrained_checkpoint) > 1:
-        task_model.load_state_dict(torch.load(args.pretrained_checkpoint,
-                                              map_location=torch.device("cpu"))["state_dict"])
+        task_model.load_state_dict(torch.load(args.pretrained_checkpoint,map_location=torch.device("cpu"))["state_dict"])
 
     checkpoint_callback = ModelCheckpoint(
-        filepath=args.output_dir,
+        dirpath=args.output_dir,
         save_top_k=args.max_keep_ckpt,
         save_last=False,
         monitor="val_f1",
