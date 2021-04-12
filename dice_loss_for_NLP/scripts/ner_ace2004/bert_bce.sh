@@ -53,7 +53,8 @@ OUTPUT_DIR=${OUTPUT_BASE_DIR}/${FILE_NAME}_${MODEL_SCALE}_${TRAIN_BATCH_SIZE}_${
 
 mkdir -p ${OUTPUT_DIR}
 
-CUDA_VISIBLE_DEVICES=0 python ${REPO_PATH}/tasks/mrc_ner/train.py \
+# CUDA_VISIBLE_DEVICES=0 
+python ${REPO_PATH}/tasks/mrc_ner/train.py \
 --gpus="0," \
 --precision=${PRECISION} \
 --train_batch_size ${TRAIN_BATCH_SIZE} \

@@ -4,11 +4,13 @@
 
 FILE_NAME=reproduce_zhmsra_dice
 # REPO_PATH=/userhome/xiaoya/mrc-with-dice-loss
-REPO_PATH=/home/xiangpan/Labs/CovidQA/dice_loss_for_NLP
+REPO_PATH=$(pwd)
+echo $REPO_PATH
+
 MODEL_SCALE=base
 # DATA_DIR=/userhome/xiaoya/dataset/new_mrc_ner/new_zh_msra
 # BERT_DIR=/userhome/xiaoya/bert/chinese_bert
-DATA_DIR=$REPO_PATH/datasets/zh_msra
+DATA_DIR=$REPO_PATH/datasets/ace2004
 BERT_DIR=$REPO_PATH/cached_models/bert-base-uncased
 
 TRAIN_BATCH_SIZE=10
@@ -54,7 +56,7 @@ OUTPUT_DIR=${OUTPUT_BASE_DIR}/${FILE_NAME}_${MODEL_SCALE}_${TRAIN_BATCH_SIZE}_${
 
 mkdir -p ${OUTPUT_DIR}
 
-# CUDA_VISIBLE_DEVICES=0 
+# CUDA_VISIBLE_DEVICES=1 
 python ${REPO_PATH}/tasks/mrc_ner/train.py \
 --gpus="0," \
 --precision=${PRECISION} \

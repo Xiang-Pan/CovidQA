@@ -65,8 +65,8 @@ class BertForQA(pl.LightningModule):
         # NOTICE: https://github.com/huggingface/transformers/issues/7735
         # fast tokenizers don’t currently work with the QA pipeline.
         self.tokenizer = AutoTokenizer.from_pretrained(self.model_path, use_fast=False, do_lower_case=self.args.do_lower_case)
-        # self.model = BertForQuestionAnswering.from_pretrained(self.model_path, config=bert_config,from_tf=True)
-        self.model = BertForQuestionAnswering.from_pretrained('bert-base-uncased',config=bert_config)
+        self.model = BertForQuestionAnswering.from_pretrained(self.model_path, config=bert_config)
+
         self.dev_cached_file = os.path.join(self.args.data_dir, "cached_{}_{}_{}_{}".format("dev",
                 self.tokenizer.__class__.__name__,
                 str(self.args.max_seq_length),
@@ -250,7 +250,8 @@ class BertForQA(pl.LightningModule):
         input_ids, attention_mask, token_type_ids, start_labels, end_labels, label_mask, unique_id = batch.values()
         start_logits, end_logits = self(input_ids, attention_mask, token_type_ids)
 
-        total_loss, start_loss, end_loss = self.compute_loss(start_logits, end_logits,start_labels, end_labels, label_mask)
+        total_loss, start_loss, end_loss = self.compute_loss(start_logits, end_logits,
+                                                             start_labels, end_labels, label_mask)
         unique_id = int(unique_id.cpu())
         output[f"val_loss"] = total_loss
         output[f"start_loss"] = start_loss
@@ -304,6 +305,7 @@ class BertForQA(pl.LightningModule):
     def test_dataloader(self,) -> DataLoader:
         return self.get_dataloader("dev")
 
+
     def get_dataloader(self, prefix="train", limit: int = None) -> DataLoader:
         """read vocab and dataset files."""
         dataset = SquadDataset(self.args, self.tokenizer, mode=prefix)
@@ -340,12 +342,12 @@ def main():
     model = BertForQA(args)
 
     if len(args.pretrained_checkpoint) > 1:
-        model.load_state_dict(torch.load(args.pretrained_checkpoint,map_location=torch.device('cpu'))["state_dict"])
+        model.load_state_dict(torch.load(args.pretrained_checkpoint,
+                                         map_location=torch.device('cpu'))["state_dict"])
 
-    # print(args.output_dir)
     checkpoint_callback = ModelCheckpoint(
-        dirpath=args.output_dir,
-        filename='{epoch}-{val_loss:.2f}',
+        filepath=args.output_dir,
+        save_top_k=args.max_keep_ckpt,
         verbose=True,
         period=-1,
         mode="auto"
@@ -358,6 +360,8 @@ def main():
     )
 
     trainer.fit(model)
+
+
 
 if __name__ == "__main__":
     set_random_seed(0)

@@ -44,14 +44,13 @@ class MRCNERDataset(Dataset):
         is_chinese: is chinese dataset
     """
     def __init__(self, json_path, tokenizer: AutoTokenizer, max_length: int = 512, possible_only=False, is_chinese=False,
-                 pad_to_maxlen=False, negative_sampling=False, prefix="train", data_sign="zh_msra", do_lower_case=False,
+                 pad_to_maxlen=False, negative_sampling=False, prefix="train", data_sign="zh_onto", do_lower_case=False,
                  pred_answerable=True):
         self.all_data = json.load(open(json_path, encoding="utf-8"))
         self.tokenzier = tokenizer
         self.max_length = max_length
         self.do_lower_case = do_lower_case
         self.label2idx = {value:key for key, value in enumerate(MRCNERDataset.get_labels(data_sign))}
- 
 
         if prefix == "train" and negative_sampling:
             neg_data_items = [x for x in self.all_data if not x["start_position"]]
@@ -87,9 +86,7 @@ class MRCNERDataset(Dataset):
 
         """
         data = self.all_data[item]
-        # print(data)
         tokenizer = self.tokenzier
-
         label_idx = torch.tensor(self.label2idx[data["entity_label"]], dtype=torch.long)
 
         if self.is_chinese:

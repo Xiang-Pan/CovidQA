@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="VcsDirectoryMappings">
+    <mapping directory="$PROJECT_DIR$" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/back/mrc-for-flat-nested-ner" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/back/mrc-for-flat-nested-ner/state_dicts/roberta-base" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/dice_loss_for_NLP/cached_models/bert-base-uncased" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/dice_loss_for_NLP/datasets/squad1/SQuAD-explorer" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/mrc-for-flat-nested-ner/cached_models/bert-base-uncased" vcs="Git" />
+  </component>
+</project>

@@ -2,11 +2,11 @@
 # -*- coding: utf-8 -*-
 
 
-REPO_PATH=/home/xiangpan/Labs/CovidQA/dice_loss_for_NLP
+REPO_PATH=/userhome/xiaoya/mrc-with-dice-loss
 export PYTHONPATH="$PYTHONPATH:$REPO_PATH"
 
-DATA_DIR=$REPO_PATH/datasets/squad1
-BERT_DIR=$REPO_PATH/cached_models/bert-base-uncased
+DATA_DIR=/userhome/xiaoya/dataset/squad1
+BERT_DIR=/userhome/xiaoya/bert/uncased_L-12_H-768_A-12
 
 LOSS_TYPE=dice
 LR=3e-5
@@ -32,7 +32,7 @@ PRECISION=16
 PROGRESS_BAR=1
 VAL_CHECK_INTERVAL=0.125
 
-OUTPUT_DIR_BASE=./outputs/dice_loss/squad
+OUTPUT_DIR_BASE=/userhome/xiaoya/outputs/dice_loss/squad
 OUTPUT_DIR=${OUTPUT_DIR_BASE}/reproduce_bert_base_dice
 
 echo "INFO -> OUTPUT_DIR is ${OUTPUT_DIR}"
@@ -41,7 +41,7 @@ CACHE_DIR=${OUTPUT_DIR}/cache
 mkdir -p ${CACHE_DIR}
 
 python ${REPO_PATH}/tasks/squad/train.py \
---gpus="0," \
+--gpus="1" \
 --precision=${PRECISION} \
 --train_batch_size ${TRAIN_BATCH_SIZE} \
 --dice_smooth ${DICE_SMOOTH} \
@@ -67,7 +67,6 @@ python ${REPO_PATH}/tasks/squad/train.py \
 --gradient_clip_val ${GRAD_CLIP} \
 --weight_decay ${WEIGHT_DECAY} \
 --do_lower_case \
---warmup_proportion ${WARMUP_PROPORTION} \
---max_keep_ckpt 1
+--warmup_proportion ${WARMUP_PROPORTION}
 
 

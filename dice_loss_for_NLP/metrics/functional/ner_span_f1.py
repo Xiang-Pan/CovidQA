@@ -82,7 +82,6 @@ def bmes_decode_flat_query_span_f1(start_preds, end_preds, match_logits, start_e
     sum_true_positive, sum_false_positive, sum_false_negative = 0, 0, 0
     start_preds, end_preds, match_logits, start_end_label_mask = start_preds.to("cpu").numpy().tolist(), end_preds.to("cpu").numpy().tolist(), match_logits.to("cpu").numpy().tolist(), start_end_label_mask.to("cpu").numpy().tolist()
     start_labels, end_labels, match_labels = start_labels.to("cpu").numpy().tolist(), end_labels.to("cpu").numpy().tolist(), match_labels.to("cpu").numpy().tolist()
-    # if answerable_pred:
     answerable_pred = answerable_pred.to("cpu").numpy().tolist()
 
     for start_pred_item, end_pred_item, match_logits_item, start_end_label_mask_item, start_label_item, end_label_item, match_label_item, answerable_item in \

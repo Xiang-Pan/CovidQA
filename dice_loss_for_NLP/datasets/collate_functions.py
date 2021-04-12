@@ -23,8 +23,6 @@ def collate_to_max_length(batch: List[List[torch.Tensor]]) -> List[torch.Tensor]
         pad_output = torch.full([batch_size, max_length], 0, dtype=batch[0][field_idx].dtype)
         for sample_idx in range(batch_size):
             data = batch[sample_idx][field_idx]
-            # print(pad_output.shape)
-            # print(data.shape)
             pad_output[sample_idx][: data.shape[0]] = data
         output.append(pad_output)
 
