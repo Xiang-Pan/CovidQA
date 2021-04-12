@@ -1,0 +1,7 @@
+._.DS_Store
+.DS_Store
+mrc-for-flat-nested-ner/
+back/
+dice_loss_for_NLP/datasets/
+dice_loss_for_NLP/cached_models/
+__pycache__/
