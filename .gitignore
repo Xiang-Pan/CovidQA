@@ -8,7 +8,7 @@ dice_loss_for_NLP_back/
 outputs/
 **/__pycache__/
 
-**/cached_*
+# **/cached_*
 dice_loss_for_NLP/datasets/squad1/SQuAD-explorer
 
 **/third_party/
