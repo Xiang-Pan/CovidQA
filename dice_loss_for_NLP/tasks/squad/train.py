@@ -264,9 +264,7 @@ class BertForQA(pl.LightningModule):
 
         input_ids, attention_mask, token_type_ids, start_labels, end_labels, label_mask, unique_id = batch.values()
         start_logits, end_logits = self(input_ids, attention_mask, token_type_ids)
-        start_logits = start_logits.squeeze(dim=2)
-        end_logits = end_logits.squeeze(dim=2)
-        # print(start_logits.shape, end_logits.shape)
+        
         total_loss, start_loss, end_loss = self.compute_loss(start_logits, end_logits,
                                                              start_labels, end_labels, label_mask)
         unique_id = int(unique_id.cpu())
