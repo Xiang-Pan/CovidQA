@@ -7,13 +7,12 @@
 REPO_PATH=$(pwd)
 export PYTHONPATH="$PYTHONPATH:$REPO_PATH"
 
-
-TASK_NAME=squad1
+#! NOTICE HERE
+TASK_NAME=covidqa
 DATA_DIR=$REPO_PATH/datasets/$TASK_NAME
 
 #! BERT VERSION
 BERT_TYPE=roberta-base
-
 BERT_DIR=$REPO_PATH/cached_models/$BERT_TYPE
 
 LOSS_TYPE=ce

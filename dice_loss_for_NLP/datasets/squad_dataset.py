@@ -55,6 +55,7 @@ class SquadDataset(Dataset):
         # load data features from cache or dataset file
         version_tag = "v2" if args.version_2_with_negative else "v1"
         print(args.data_dir)
+        print(tokenizer.__class__.__name__)
         cached_features_file = os.path.join(
             cache_dir if cache_dir is not None else args.data_dir,
             "cached_{}_{}_{}_{}".format(

@@ -39,3 +39,7 @@ sharBEed
 |ace_2004 + squad1(share BERT)|CovidQA(3.21)|
 
 # TODO
+
+
+# resources
+https://github.com/JerryWei03/COVID-Q
