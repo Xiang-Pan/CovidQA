@@ -17,6 +17,8 @@ span_f1
 # combine
 
 
-
 # Covid Doamin
+# QA only
+43.27
 
+# transfer

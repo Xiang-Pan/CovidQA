@@ -10,7 +10,7 @@ import os
 import json
 from metrics.functional.squad.postprocess_predication import compute_predictions_logits
 from metrics.functional.squad.evaluate_v1 import evaluate as evaluate_squad_v1
-
+# from metrics.functional.squad.evaluate_v2 import evaluate as evaluate_squad_v2
 class SquadEvalMetric:
     def __init__(self,
                  n_best_size: int = 20,
@@ -65,6 +65,8 @@ class SquadEvalMetric:
             eval_results = evaluate_squad_v1(text_dataset, all_predictions)
             exact_match, f1 = eval_results["exact_match"], eval_results["f1"]
         else:
+            # eval_results = evaluate_squad_v2(text_dataset, all_predictions)
+            # exact_match, f1 = eval_results["exact_match"], eval_results["f1"]
             raise ValueError("Evaluation for SQuAD 2.0 is not Implementation yet")
 
         return exact_match, f1
