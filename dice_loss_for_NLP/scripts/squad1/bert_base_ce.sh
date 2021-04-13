@@ -8,7 +8,7 @@ REPO_PATH=$(pwd)
 export PYTHONPATH="$PYTHONPATH:$REPO_PATH"
 
 
-TASK_NAME=squad
+TASK_NAME=squad1
 DATA_DIR=$REPO_PATH/datasets/$TASK_NAME
 BERT_DIR=$REPO_PATH/cached_models/bert-base-uncased
 

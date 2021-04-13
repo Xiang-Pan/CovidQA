@@ -60,4 +60,7 @@ def get_parser() -> argparse.ArgumentParser:
     # only keep the best checkpoint after training.
     parser.add_argument("--only_keep_the_best_ckpt_after_training", action="store_true", help="only the best model checkpoint after training. ")
 
+
+    parser.add_argument("--load_ner_bert", action="store_true", help="load ner bert")
+
     return parser

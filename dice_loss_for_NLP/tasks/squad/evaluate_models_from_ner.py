@@ -6,8 +6,9 @@
 # evaluate the saved model checkpoints.
 
 import os
-from tasks.squad.train import BertForQA
-
+import torch
+# from tasks.squad.train import BertForQA
+from tasks.squad.train_from_ner import BertForQA
 
 
 from utils.get_parser import get_parser
@@ -34,17 +35,15 @@ def evaluate(args):
                       distributed_backend=args.distributed_backend,
                       deterministic=True)
     
-    # reload test dataloader
-    # print(trainer.test())
     print("path_to_model_checkpoint",args.path_to_model_checkpoint)
-    # print(BertForQA)
 
     model = BertForQA.load_from_checkpoint(
         checkpoint_path=args.path_to_model_checkpoint,
         hparams_file=args.path_to_model_hparams_file,
         map_location=None,
-        batch_size=args.eval_batch_size,)
+        batch_size=args.eval_batch_size, strict= False)
     
+    model.model.qa_classifier.load_state_dict(torch.load("./qa_classifier"))
     # # evaluate ner
     # model = BertForNERTask.load_from_checkpoint(
     #     checkpoint_path=args.path_to_model_checkpoint,

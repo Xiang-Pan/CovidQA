@@ -4,13 +4,12 @@
 REPO_PATH=$(pwd)
 export PYTHONPATH="$PYTHONPATH:$REPO_PATH"
 
-
-TASK_NAME=squad
+TASK_NAME=squad1
 
 OUTPUT_DIR=$REPO_PATH/outputs/ce_loss/$TASK_NAME/reproduce_bert_base_ce
 
-MODEL_CKPT=${OUTPUT_DIR}/epoch=1.ckpt
-HPARAMS_PATH=${OUTPUT_DIR}/lightning_logs/version_4/hparams.yaml
+MODEL_CKPT=${OUTPUT_DIR}/epoch=0_v0.ckpt
+HPARAMS_PATH=${OUTPUT_DIR}/lightning_logs/version_0/hparams.yaml
 
 # CUDA_VISIBLE_DEVICES=3 
 python ${REPO_PATH}/tasks/squad/evaluate_models.py \

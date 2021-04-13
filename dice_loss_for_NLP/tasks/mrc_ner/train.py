@@ -47,7 +47,9 @@ class BertForNERTask(pl.LightningModule):
             # eval mode
             TmpArgs = namedtuple("tmp_args", field_names=list(args.keys()))
             self.args = args = TmpArgs(**args)
+            # self.args.output_dir="./ner_tansfer"
             logging.basicConfig(format=format, filename=os.path.join(self.args.output_dir, "eval_test.txt"), level=logging.INFO)
+            # logging.basicConfig(format=format, filename=os.path.join("./ner_tansfer", "eval_test.txt"), level=logging.INFO)
 
         self.result_logger = logging.getLogger(__name__)
         self.result_logger.setLevel(logging.INFO)
@@ -66,10 +68,13 @@ class BertForNERTask(pl.LightningModule):
                                                             construct_entity_span=self.args.construct_entity_span,
                                                             pred_answerable=self.args.pred_answerable,
                                                             activate_func=self.args.activate_func)
+        self.model = BertForQueryNER.from_pretrained(self.model_path, config=bert_config)
+
+
         print(f"DEBUG INFO -> pred_answerable {self.args.pred_answerable}")
         print(f"DEBUG INFO -> check bert_config \n {bert_config}")
         self.tokenizer = AutoTokenizer.from_pretrained(self.model_path, use_fast=False, do_lower_case=self.args.do_lower_case)
-        self.model = BertForQueryNER.from_pretrained(self.model_path, config=bert_config)
+
 
         self.evaluation_metric = MRCNERSpanF1(flat=self.args.flat_ner)
 

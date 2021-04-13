@@ -7,7 +7,6 @@ best exact match
 span_f1
 88.1431
 
-
 # ace 2004 only(best)
 0.71338
 {'test_span_f1': tensor(0.6681, device='cuda:0'),
@@ -22,3 +21,8 @@ span_f1
 43.27
 
 # transfer
+covidqa(43.27)
+squad1  (span_f1:       88.1431)  -> covidqa(28.84)
+ace_2004(MRC_NER span_f1:0.6681)  -> covidqa(2.27)
+ace_2004_bert + squad1_classifier -> covidqa(3.21)
+

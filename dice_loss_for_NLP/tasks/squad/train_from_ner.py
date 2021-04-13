@@ -35,7 +35,7 @@ from datasets.truncate_dataset import TruncateDataset
 from metrics.squad_em_f1 import SquadEvalMetric
 
 from models.model_config import BertForQueryNERConfig
-from models.bert_query_ner import BertForQueryNER
+from models.bert_query_ner_for_qa import BertForQueryNER
 
 
 class BertForQA(pl.LightningModule):
@@ -43,7 +43,6 @@ class BertForQA(pl.LightningModule):
     def __init__(self, args: argparse.Namespace):
         """Initialize a model, tokenizer and config"""
         super().__init__()
-        # args.data_dir = "/home/xiangpan/Labs/CovidQA/dice_loss_for_NLP/datasets/squad1"
         if isinstance(args, argparse.Namespace):
             args.default_root_dir = args.output_dir
             self.save_hyperparameters(args)
@@ -62,23 +61,24 @@ class BertForQA(pl.LightningModule):
         self.train_batch_size = self.args.train_batch_size
         self.eval_batch_size = self.args.eval_batch_size
 
-        bert_config = BertForQAConfig.from_pretrained(self.model_path,
-                                                      hidden_dropout_prob=args.bert_hidden_dropout,
-                                                      multi_layer_classifier=args.multi_layer_classifier)
-        self.model = BertForQuestionAnswering.from_pretrained(self.model_path, config=bert_config)
+        # bert_config = BertForQAConfig.from_pretrained(self.model_path,
+        #                                               hidden_dropout_prob=args.bert_hidden_dropout,
+        #                                               multi_layer_classifier=args.multi_layer_classifier)
+        # self.model = BertForQuestionAnswering.from_pretrained(self.model_path, config=bert_config)
 
-        # bert_config = BertForQueryNERConfig.from_pretrained(self.model_path,
-        #                                                     num_labels=1,
-        #                                                     hidden_dropout_prob=0.1,
-        #                                                     construct_entity_span="start_and_end",
-        #                                                     pred_answerable= True,
-        #                                                     activate_func="relu")
-        # self.model = BertForQueryNER.from_pretrained(self.model_path, config=bert_config)
+        bert_config = BertForQueryNERConfig.from_pretrained(self.model_path,
+                                                            num_labels=1,
+                                                            hidden_dropout_prob=0.1,
+                                                            construct_entity_span="start_and_end",
+                                                            pred_answerable= True,
+                                                            activate_func="relu")
+        self.model = BertForQueryNER.from_pretrained(self.model_path, config=bert_config)
 
 
         # NOTICE: https://github.com/huggingface/transformers/issues/7735
         # fast tokenizers don’t currently work with the QA pipeline.
         self.tokenizer = AutoTokenizer.from_pretrained(self.model_path, use_fast=False, do_lower_case=self.args.do_lower_case)
+
 
         self.dev_cached_file = os.path.join(self.args.data_dir, "cached_{}_{}_{}_{}".format("dev",
                 self.tokenizer.__class__.__name__,
@@ -264,9 +264,6 @@ class BertForQA(pl.LightningModule):
 
         input_ids, attention_mask, token_type_ids, start_labels, end_labels, label_mask, unique_id = batch.values()
         start_logits, end_logits = self(input_ids, attention_mask, token_type_ids)
-        start_logits = start_logits.squeeze(dim=2)
-        end_logits = end_logits.squeeze(dim=2)
-        # print(start_logits.shape, end_logits.shape)
         total_loss, start_loss, end_loss = self.compute_loss(start_logits, end_logits,
                                                              start_labels, end_labels, label_mask)
         unique_id = int(unique_id.cpu())
@@ -361,9 +358,8 @@ def main():
     model = BertForQA(args)
 
     if len(args.pretrained_checkpoint) > 1:
-        model.load_state_dict(torch.load(args.pretrained_checkpoint,map_location=torch.device('cpu'))["state_dict"])
-    if args.load_ner_bert:
-        model.model.bert.load_state_dict(torch.load("./cached_models/ner_bert"),strict= False)
+        model.load_state_dict(torch.load(args.pretrained_checkpoint,
+                                         map_location=torch.device('cpu'))["state_dict"])
 
     checkpoint_callback = ModelCheckpoint(
         filepath=args.output_dir,

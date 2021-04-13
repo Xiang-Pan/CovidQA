@@ -27,7 +27,8 @@ class SquadDataset(Dataset):
                  is_language_sensitive: Optional[bool] = False,
                  cache_dir: Optional[str] = None,
                  dataset_format: Optional[str] = "pt",
-                 threads: Optional[int] = 1,
+                #  threads: Optional[int] = 1,
+                 threads: Optional[int] = 8, 
                  debug: Optional[bool] = False,):
 
         self.args = args
@@ -53,6 +54,7 @@ class SquadDataset(Dataset):
 
         # load data features from cache or dataset file
         version_tag = "v2" if args.version_2_with_negative else "v1"
+        print(args.data_dir)
         cached_features_file = os.path.join(
             cache_dir if cache_dir is not None else args.data_dir,
             "cached_{}_{}_{}_{}".format(

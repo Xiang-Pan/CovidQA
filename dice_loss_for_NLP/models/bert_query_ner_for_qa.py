@@ -35,7 +35,7 @@ class BertForQueryNER(BertPreTrainedModel):
         self.pred_answerable = config.pred_answerable
         if self.pred_answerable:
             self.answerable_cls_output = MultiLayerPerceptronClassifier(hidden_size=config.hidden_size, num_labels=1, activate_func=config.activate_func)
-
+        self.qa_classifier = nn.Linear(config.hidden_size, 2)
         self.init_weights()
 
     def forward(self, input_ids, token_type_ids=None, attention_mask=None):
@@ -52,46 +52,54 @@ class BertForQueryNER(BertPreTrainedModel):
 
         bert_outputs = self.bert(input_ids, token_type_ids=token_type_ids, attention_mask=attention_mask)
 
-        sequence_heatmap = bert_outputs[0]  # [batch, seq_len, hidden]
-        sequence_cls = bert_outputs[1]
+        # sequence_heatmap = bert_outputs[0]  # [batch, seq_len, hidden]
+        # sequence_cls = bert_outputs[1]
 
-        batch_size, seq_len, hid_size = sequence_heatmap.size()
-        if self.construct_entity_span == "match" :
-            start_logits = end_logits = torch.ones_like(input_ids).float()
-            span_logits = self.span_nn(sequence_heatmap)
-        elif self.construct_entity_span == "start_end_match":
-            sequence_heatmap = self.dropout(sequence_heatmap)
-            start_logits = self.start_outputs(sequence_heatmap).view(batch_size, seq_len, -1)  # [batch, seq_len, 1]
-            end_logits = self.end_outputs(sequence_heatmap).view(batch_size, seq_len, -1)  # [batch, seq_len, 1]
+        # batch_size, seq_len, hid_size = sequence_heatmap.size()
+        # if self.construct_entity_span == "match" :
+        #     start_logits = end_logits = torch.ones_like(input_ids).float()
+        #     span_logits = self.span_nn(sequence_heatmap)
+        # elif self.construct_entity_span == "start_end_match":
+        #     sequence_heatmap = self.dropout(sequence_heatmap)
+        #     start_logits = self.start_outputs(sequence_heatmap).view(batch_size, seq_len, -1)  # [batch, seq_len, 1]
+        #     end_logits = self.end_outputs(sequence_heatmap).view(batch_size, seq_len, -1)  # [batch, seq_len, 1]
 
-            # for every position $i$ in sequence, should concate $j$ to
-            # predict if $i$ and $j$ are start_pos and end_pos for an entity.
-            # [batch, seq_len, seq_len, hidden]
-            start_extend = sequence_heatmap.unsqueeze(2).expand(-1, -1, seq_len, -1)
-            # [batch, seq_len, seq_len, hidden]
-            end_extend = sequence_heatmap.unsqueeze(1).expand(-1, seq_len, -1, -1)
-            # [batch, seq_len, seq_len, hidden*2]
-            span_matrix = torch.cat([start_extend, end_extend], 3)
-            # [batch, seq_len, seq_len]
-            span_logits = self.span_embedding(span_matrix).squeeze(-1)
-        elif self.construct_entity_span == "start_and_end":
-            sequence_heatmap = self.dropout(sequence_heatmap)
-            start_logits = self.start_outputs(sequence_heatmap).view(batch_size, seq_len, -1) # [batch, seq_len, 1]
-            end_logits = self.end_outputs(sequence_heatmap).view(batch_size, seq_len, -1)  # [batch, seq_len, 1]
+        #     # for every position $i$ in sequence, should concate $j$ to
+        #     # predict if $i$ and $j$ are start_pos and end_pos for an entity.
+        #     # [batch, seq_len, seq_len, hidden]
+        #     start_extend = sequence_heatmap.unsqueeze(2).expand(-1, -1, seq_len, -1)
+        #     # [batch, seq_len, seq_len, hidden]
+        #     end_extend = sequence_heatmap.unsqueeze(1).expand(-1, seq_len, -1, -1)
+        #     # [batch, seq_len, seq_len, hidden*2]
+        #     span_matrix = torch.cat([start_extend, end_extend], 3)
+        #     # [batch, seq_len, seq_len]
+        #     span_logits = self.span_embedding(span_matrix).squeeze(-1)
+        # elif self.construct_entity_span == "start_and_end":
+        #     sequence_heatmap = self.dropout(sequence_heatmap)
+        #     start_logits = self.start_outputs(sequence_heatmap).view(batch_size, seq_len, -1) # [batch, seq_len, 1]
+        #     end_logits = self.end_outputs(sequence_heatmap).view(batch_size, seq_len, -1)  # [batch, seq_len, 1]
 
-            span_logits = None
-        elif self.construct_entity_span == "start_end":
-            sequence_heatmap = self.dropout(sequence_heatmap)
-            start_end_logits = self.start_end_outputs(sequence_heatmap)
-            start_logits, end_logits = start_end_logits.split(1, dim=-1)
+        #     span_logits = None
+        # elif self.construct_entity_span == "start_end":
+        #     sequence_heatmap = self.dropout(sequence_heatmap)
+        #     start_end_logits = self.start_end_outputs(sequence_heatmap)
+        #     start_logits, end_logits = start_end_logits.split(1, dim=-1)
 
-            span_logits = None
-        else:
-            raise ValueError
+        #     span_logits = None
+        # else:
+        #     raise ValueError
 
+        sequence_heatmap = self.dropout(bert_outputs[0])  # [batch, seq_len, hidden]
+        logits = self.qa_classifier(sequence_heatmap)
+        start_logits, end_logits = logits.split(1, dim=-1)
+        start_logits = start_logits.squeeze(-1)
+        end_logits = end_logits.squeeze(-1)
+
+        # start_logits = start_logits.squeeze(dim=1)
+        # # end_logits = end_logits.squeeze(dim=1)
+        # start_logits
         # if self.pred_answerable:
         #     cls_logits = self.answerable_cls_output(sequence_cls)
         #     return start_logits, end_logits, span_logits, cls_logits
 
-        # return start_logits, end_logits, span_logits
         return start_logits, end_logits

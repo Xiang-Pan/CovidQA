@@ -1,2 +1,4 @@
 cached_ filter=lfs diff=lfs merge=lfs -text
 cached_* filter=lfs diff=lfs merge=lfs -text
+ner_bert filter=lfs diff=lfs merge=lfs -text
+qa_classifier filter=lfs diff=lfs merge=lfs -text
