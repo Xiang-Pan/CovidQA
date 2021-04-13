@@ -89,9 +89,8 @@ class BertForQueryNER(BertPreTrainedModel):
         else:
             raise ValueError
 
-        # if self.pred_answerable:
-        #     cls_logits = self.answerable_cls_output(sequence_cls)
-        #     return start_logits, end_logits, span_logits, cls_logits
+        if self.pred_answerable:
+            cls_logits = self.answerable_cls_output(sequence_cls)
+            return start_logits, end_logits, span_logits, cls_logits
 
-        # return start_logits, end_logits, span_logits
-        return start_logits, end_logits
+        return start_logits, end_logits, span_logits
