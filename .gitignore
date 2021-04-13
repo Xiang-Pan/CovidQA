@@ -1,7 +1,7 @@
 
 # model cache
 **/cached_models/bert-base-uncased
-**/cache
+# **/cache
 
 
 dice_loss_for_NLP_back/
@@ -17,6 +17,3 @@ dice_loss_for_NLP/datasets/squad1/SQuAD-explorer
 .DS_Store
 # mrc-for-flat-nested-ner/
 back/
-# dice_loss_for_NLP/datasets/
-# dice_loss_for_NLP/cached_models/
-# __pycache__/
