@@ -1,3 +1,9 @@
 [submodule "dice_loss_for_NLP/datasets/squad1/SQuAD-explorer"]
 	path = dice_loss_for_NLP/datasets/squad1/SQuAD-explorer
 	url = https://github.com/rajpurkar/SQuAD-explorer
+[submodule "dice_loss_for_NLP/dice_loss_for_NLP/cached_models/roberta-base"]
+	path = dice_loss_for_NLP/dice_loss_for_NLP/cached_models/roberta-base
+	url = https://huggingface.co/roberta-base
+[submodule "dice_loss_for_NLP/cached_models/roberta-base"]
+	path = dice_loss_for_NLP/cached_models/roberta-base
+	url = https://huggingface.co/roberta-base
