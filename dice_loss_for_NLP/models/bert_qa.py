@@ -9,17 +9,18 @@
 import torch.nn as nn
 from torch import Tensor
 from transformers import BertModel, BertPreTrainedModel,RobertaModel
+
+from transformers.models.roberta.modeling_roberta import RobertaPreTrainedModel
 from models.classifier import truncated_normal_, BertMLP
 
 
-class BertForQuestionAnswering(BertPreTrainedModel):
+class BertForQuestionAnswering(RobertaPreTrainedModel):
     """Finetuning Bert Model for the question answering task."""
     def __init__(self, config):
         super(BertForQuestionAnswering, self).__init__(config)
 
-        self.bert = RobertaModel(config, add_pooling_layer=False)
-
-
+        # self.bert = RobertaModel(config, add_pooling_layer=False)
+        self.roberta = RobertaModel(config, add_pooling_layer=False)
         if config.multi_layer_classifier:
             self.qa_classifier = BertMLP(config)
         else:
@@ -39,7 +40,7 @@ class BertForQuestionAnswering(BertPreTrainedModel):
             end_logits: end/non-end logits of shape [batch, seq_len]
         """
 
-        bert_outputs = self.bert(input_ids, token_type_ids=token_type_ids, attention_mask=attention_mask)
+        bert_outputs = self.roberta(input_ids, token_type_ids=token_type_ids, attention_mask=attention_mask)
 
         sequence_heatmap = self.dropout(bert_outputs[0])  # [batch, seq_len, hidden]
         logits = self.qa_classifier(sequence_heatmap)

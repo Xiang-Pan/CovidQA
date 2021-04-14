@@ -32,7 +32,7 @@ from utils.get_parser import get_parser
 from models.model_config import BertForQueryNERConfig
 from models.bert_query_ner import BertForQueryNER
 
-
+from transformers import RobertaTokenizer
 
 class BertForNERTask(pl.LightningModule):
     def __init__(self, args: argparse.Namespace):
@@ -73,7 +73,9 @@ class BertForNERTask(pl.LightningModule):
 
         print(f"DEBUG INFO -> pred_answerable {self.args.pred_answerable}")
         print(f"DEBUG INFO -> check bert_config \n {bert_config}")
-        self.tokenizer = AutoTokenizer.from_pretrained(self.model_path, use_fast=False, do_lower_case=self.args.do_lower_case)
+        # self.tokenizer = AutoTokenizer.from_pretrained(self.model_path, use_fast=False, do_lower_case=self.args.do_lower_case)
+        self.tokenizer = RobertaTokenizer.from_pretrained("roberta-base")
+        # self.tokenizer = RobertaModel
 
 
         self.evaluation_metric = MRCNERSpanF1(flat=self.args.flat_ner)

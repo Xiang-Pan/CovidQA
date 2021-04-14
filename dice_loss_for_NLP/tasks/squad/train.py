@@ -66,10 +66,12 @@ class BertForQA(pl.LightningModule):
                                                       hidden_dropout_prob=args.bert_hidden_dropout,
                                                       multi_layer_classifier=args.multi_layer_classifier)
         self.model = BertForQuestionAnswering.from_pretrained(self.model_path, config=bert_config)
+        # print(self.model)
+        # self.model.bert = self.model.bert.from_pretrained(self.model_path, config=bert_config)
 
         # NOTICE: https://github.com/huggingface/transformers/issues/7735
         # fast tokenizers don’t currently work with the QA pipeline.
-        print(self.model_path,"self.model_path")
+        # print(self.model_path,"self.model_path")
         self.tokenizer = AutoTokenizer.from_pretrained(self.model_path, use_fast=False, do_lower_case=self.args.do_lower_case)
 
         self.dev_cached_file = os.path.join(self.args.data_dir, "cached_{}_{}_{}_{}".format("dev",
