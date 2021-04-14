@@ -42,7 +42,7 @@ CACHE_DIR=${OUTPUT_DIR}/cache
 mkdir -p ${CACHE_DIR}
 
 python ${REPO_PATH}/tasks/squad/train.py \
---gpus="0,1" \
+--gpus="0," \
 --precision=${PRECISION} \
 --train_batch_size ${TRAIN_BATCH_SIZE} \
 --progress_bar_refresh_rate ${PROGRESS_BAR} \
@@ -64,5 +64,4 @@ python ${REPO_PATH}/tasks/squad/train.py \
 --gradient_clip_val ${GRAD_CLIP} \
 --weight_decay ${WEIGHT_DECAY} \
 --do_lower_case \
---warmup_proportion ${WARMUP_PROPORTION} \
---load_ner_bert\
+--warmup_proportion ${WARMUP_PROPORTION}

@@ -20,7 +20,7 @@ WARMUP_PROPORTION=0.002
 
 GRAD_CLIP=1.0
 ACC_GRAD=1
-MAX_EPOCH=2
+MAX_EPOCH=5
 BERT_DROPOUT=0.1
 WEIGHT_DECAY=0.002
 
@@ -64,5 +64,4 @@ python ${REPO_PATH}/tasks/squad/train.py \
 --gradient_clip_val ${GRAD_CLIP} \
 --weight_decay ${WEIGHT_DECAY} \
 --do_lower_case \
---warmup_proportion ${WARMUP_PROPORTION} \
---load_ner_bert\
+--warmup_proportion ${WARMUP_PROPORTION}

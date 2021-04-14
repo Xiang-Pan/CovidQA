@@ -1,30 +1,29 @@
 #!/usr/bin/env bash
 # -*- coding: utf-8 -*-
 
+# description:
+# predictions_4_7387.json
+# EM -> 83.98; F1 -> 90.89
 
-# REPO_PATH=/userhome/xiaoya/mrc-with-dice-loss
-
-REPO_PATH=$(pwd)
+REPO_PATH=/userhome/xiaoya/mrc-with-dice-loss
 export PYTHONPATH="$PYTHONPATH:$REPO_PATH"
 
-
-TASK_NAME=squad1
-DATA_DIR=$REPO_PATH/datasets/$TASK_NAME
-BERT_DIR=$REPO_PATH/cached_models/bert-base-uncased
+MODEL_SCALE=large
+DATA_DIR=/userhome/xiaoya/dataset/squad1
+BERT_DIR=/userhome/xiaoya/bert/uncased_L-24_H-1024_A-16
 
 LOSS_TYPE=ce
 LR=3e-5
 LR_SCHEDULE=linear
 OPTIMIZER=adamw
 WARMUP_PROPORTION=0.002
-
 GRAD_CLIP=1.0
-ACC_GRAD=1
+ACC_GRAD=6
 MAX_EPOCH=2
+
 BERT_DROPOUT=0.1
 WEIGHT_DECAY=0.002
-
-TRAIN_BATCH_SIZE=12
+TRAIN_BATCH_SIZE=4
 MAX_QUERY_LEN=64
 MAX_SEQ_LEN=384
 DOC_STRIDE=128
@@ -34,15 +33,15 @@ PROGRESS_BAR=1
 VAL_CHECK_INTERVAL=0.125
 DISTRIBUTE=ddp
 
-OUTPUT_DIR_BASE=$REPO_PATH/outputs/$LOSS_TYPE/$TASK_NAME
-OUTPUT_DIR=${OUTPUT_DIR_BASE}/reproduce_bert_base_ce
+OUTPUT_DIR_BASE=/userhome/xiaoya/outputs/dice_loss/squad
+OUTPUT_DIR=${OUTPUT_DIR_BASE}/reproduce_bert_large_ce
 
 mkdir -p ${OUTPUT_DIR}
 CACHE_DIR=${OUTPUT_DIR}/cache
 mkdir -p ${CACHE_DIR}
 
 python ${REPO_PATH}/tasks/squad/train.py \
---gpus="0,1" \
+--gpus="1" \
 --precision=${PRECISION} \
 --train_batch_size ${TRAIN_BATCH_SIZE} \
 --progress_bar_refresh_rate ${PROGRESS_BAR} \
@@ -64,5 +63,5 @@ python ${REPO_PATH}/tasks/squad/train.py \
 --gradient_clip_val ${GRAD_CLIP} \
 --weight_decay ${WEIGHT_DECAY} \
 --do_lower_case \
---warmup_proportion ${WARMUP_PROPORTION} \
---load_ner_bert\
+--warmup_proportion ${WARMUP_PROPORTION}
+

@@ -42,7 +42,7 @@ CACHE_DIR=${OUTPUT_DIR}/cache
 mkdir -p ${CACHE_DIR}
 
 python ${REPO_PATH}/tasks/squad/train.py \
---gpus="0,1" \
+--gpus="0," \
 --precision=${PRECISION} \
 --train_batch_size ${TRAIN_BATCH_SIZE} \
 --progress_bar_refresh_rate ${PROGRESS_BAR} \
