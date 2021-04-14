@@ -48,7 +48,7 @@ class MRCNERDataset(Dataset):
                  pred_answerable=True):
         self.all_data = json.load(open(json_path, encoding="utf-8"))
         self.tokenzier = tokenizer
-        print(self.tokenzier)
+        # print(self.tokenzier)
         self.max_length = max_length
         self.do_lower_case = do_lower_case
         self.label2idx = {value:key for key, value in enumerate(MRCNERDataset.get_labels(data_sign))}
@@ -87,6 +87,7 @@ class MRCNERDataset(Dataset):
 
         """
         data = self.all_data[item]
+        # print(data)
         tokenizer = self.tokenzier
         label_idx = torch.tensor(self.label2idx[data["entity_label"]], dtype=torch.long)
 
@@ -106,13 +107,15 @@ class MRCNERDataset(Dataset):
             return_overflowing_tokens=True,
             return_token_type_ids=True)
 
+        # print(query_context_tokens)
+
         if tokenizer.pad_token_id in query_context_tokens["input_ids"]:
             non_padded_ids = query_context_tokens["input_ids"][: query_context_tokens["input_ids"].index(tokenizer.pad_token_id)]
         else:
             non_padded_ids = query_context_tokens["input_ids"]
 
         non_pad_tokens = tokenizer.convert_ids_to_tokens(non_padded_ids)
-        print(non_pad_tokens)
+
         first_sep_token = non_pad_tokens.index("</s>")
         end_sep_token = len(non_pad_tokens) - 1
         new_start_positions = []

@@ -231,6 +231,7 @@ class BertForNERTask(pl.LightningModule):
             start_end_logits_size = start_logits.shape[-1]
             if start_end_logits_size == 1:
                 loss_fct = BCEWithLogitsLoss(reduction="none")
+                # print(start_logits,start_labels)
                 start_loss = loss_fct(start_logits.view(-1), start_labels.view(-1).float())
                 start_loss = (start_loss * start_float_label_mask).sum() / start_float_label_mask.sum()
                 end_loss = loss_fct(end_logits.view(-1), end_labels.view(-1).float())
