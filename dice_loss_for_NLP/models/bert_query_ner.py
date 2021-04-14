@@ -14,7 +14,6 @@ class BertForQueryNER(RobertaPreTrainedModel):
     def __init__(self, config):
         super(BertForQueryNER, self).__init__(config)
 
-        
         self.roberta = RobertaModel(config)
 
         self.construct_entity_span = config.construct_entity_span

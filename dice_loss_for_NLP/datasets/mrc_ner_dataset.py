@@ -112,7 +112,7 @@ class MRCNERDataset(Dataset):
             non_padded_ids = query_context_tokens["input_ids"]
 
         non_pad_tokens = tokenizer.convert_ids_to_tokens(non_padded_ids)
-        # print(non_pad_tokens)
+        print(non_pad_tokens)
         first_sep_token = non_pad_tokens.index("</s>")
         end_sep_token = len(non_pad_tokens) - 1
         new_start_positions = []
