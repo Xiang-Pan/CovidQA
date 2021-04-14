@@ -10,7 +10,7 @@ import torch.nn as nn
 from torch import Tensor
 from transformers import BertModel, BertPreTrainedModel,RobertaModel
 
-from transformers.models.roberta.modeling_roberta import RobertaPreTrainedModel
+from transformers.modeling_roberta import RobertaPreTrainedModel
 from models.classifier import truncated_normal_, BertMLP
 
 

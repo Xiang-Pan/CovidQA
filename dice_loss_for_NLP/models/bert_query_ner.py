@@ -8,7 +8,7 @@ import torch.nn as nn
 from transformers import BertModel, BertPreTrainedModel, RobertaModel
 
 from models.classifier import SpanClassifier, MultiLayerPerceptronClassifier
-from transformers.models.roberta.modeling_roberta import RobertaPreTrainedModel
+from transformers.modeling_roberta import RobertaPreTrainedModel
 
 class BertForQueryNER(RobertaPreTrainedModel):
     def __init__(self, config):
