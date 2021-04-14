@@ -48,6 +48,7 @@ class MRCNERDataset(Dataset):
                  pred_answerable=True):
         self.all_data = json.load(open(json_path, encoding="utf-8"))
         self.tokenzier = tokenizer
+        print(self.tokenzier)
         self.max_length = max_length
         self.do_lower_case = do_lower_case
         self.label2idx = {value:key for key, value in enumerate(MRCNERDataset.get_labels(data_sign))}
@@ -111,6 +112,7 @@ class MRCNERDataset(Dataset):
             non_padded_ids = query_context_tokens["input_ids"]
 
         non_pad_tokens = tokenizer.convert_ids_to_tokens(non_padded_ids)
+        print(non_pad_tokens)
         first_sep_token = non_pad_tokens.index("[SEP]")
         end_sep_token = len(non_pad_tokens) - 1
         new_start_positions = []

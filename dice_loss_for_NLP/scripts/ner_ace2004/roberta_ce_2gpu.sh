@@ -9,7 +9,7 @@ MODEL_SCALE=base
 DATA_DIR=$REPO_PATH/datasets/ace2004
 
 #! BERT VERSION
-BERT_TYPE=bert-base-uncased
+BERT_TYPE=roberta-base
 BERT_DIR=$REPO_PATH/cached_models/$BERT_TYPE
 
 TRAIN_BATCH_SIZE=12
@@ -27,7 +27,7 @@ GRAD_CLIP=1.0
 WEIGHT_DECAY=0.002
 WARMUP_PROPORTION=0.1
 
-LOSS_TYPE=ce
+LOSS_TYPE=bce
 W_START=1
 W_END=1
 W_SPAN=0.3
@@ -58,7 +58,7 @@ mkdir -p ${OUTPUT_DIR}
 
 # CUDA_VISIBLE_DEVICES=0 
 python ${REPO_PATH}/tasks/mrc_ner/train.py \
---gpus="0," \
+--gpus="0,1" \
 --precision=${PRECISION} \
 --train_batch_size ${TRAIN_BATCH_SIZE} \
 --eval_batch_size ${EVAL_BATCH_SIZE} \

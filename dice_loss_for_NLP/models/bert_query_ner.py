@@ -5,7 +5,7 @@
 
 import torch
 import torch.nn as nn
-from transformers import BertModel, BertPreTrainedModel
+from transformers import BertModel, BertPreTrainedModel, RobertaModel
 
 from models.classifier import SpanClassifier, MultiLayerPerceptronClassifier
 
@@ -13,7 +13,9 @@ from models.classifier import SpanClassifier, MultiLayerPerceptronClassifier
 class BertForQueryNER(BertPreTrainedModel):
     def __init__(self, config):
         super(BertForQueryNER, self).__init__(config)
-        self.bert = BertModel(config)
+
+        
+        self.bert = RobertaModel(config)
 
         self.construct_entity_span = config.construct_entity_span
         self.dropout = nn.Dropout(config.hidden_dropout_prob)

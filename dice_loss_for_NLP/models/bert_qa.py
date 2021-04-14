@@ -8,7 +8,7 @@
 
 import torch.nn as nn
 from torch import Tensor
-from transformers import BertModel, BertPreTrainedModel
+from transformers import BertModel, BertPreTrainedModel,RobertaModel
 from models.classifier import truncated_normal_, BertMLP
 
 
@@ -17,7 +17,9 @@ class BertForQuestionAnswering(BertPreTrainedModel):
     def __init__(self, config):
         super(BertForQuestionAnswering, self).__init__(config)
 
-        self.bert = BertModel(config, add_pooling_layer=False)
+        self.bert = RobertaModel(config, add_pooling_layer=False)
+
+
         if config.multi_layer_classifier:
             self.qa_classifier = BertMLP(config)
         else:

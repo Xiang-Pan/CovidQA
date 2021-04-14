@@ -7,13 +7,12 @@
 REPO_PATH=$(pwd)
 export PYTHONPATH="$PYTHONPATH:$REPO_PATH"
 
-
-TASK_NAME=squad1
+#! NOTICE HERE
+TASK_NAME=covidqa
 DATA_DIR=$REPO_PATH/datasets/$TASK_NAME
 
 #! BERT VERSION
 BERT_TYPE=roberta-base
-
 BERT_DIR=$REPO_PATH/cached_models/$BERT_TYPE
 
 LOSS_TYPE=ce
@@ -46,7 +45,7 @@ CACHE_DIR=${OUTPUT_DIR}/cache
 mkdir -p ${CACHE_DIR}
 
 python ${REPO_PATH}/tasks/squad/train.py \
---gpus="0,1" \
+--gpus="0," \
 --precision=${PRECISION} \
 --train_batch_size ${TRAIN_BATCH_SIZE} \
 --progress_bar_refresh_rate ${PROGRESS_BAR} \

@@ -2,9 +2,9 @@
 #SBATCH --job-name=torch-test    # create a short name for your job
 #SBATCH --nodes=1                # node count
 #SBATCH --ntasks=1               # total number of tasks across all nodes
-#SBATCH --cpus-per-task=12       # cpu-cores per task (>1 if multi-threaded tasks)
+#SBATCH --cpus-per-task=8        # cpu-cores per task (>1 if multi-threaded tasks)
 #SBATCH --mem=32G                # total memory per node (4 GB per cpu-core is default)
-#SBATCH --gres=gpu:4             # number of gpus per node
+#SBATCH --gres=gpu:2             # number of gpus per node
 #SBATCH --time=168:00:00          # total run time limit (HH:MM:SS)
 #SBATCH --mail-type=begin        # send mail when job begins
 #SBATCH --mail-type=end          # send mail when job ends
@@ -13,16 +13,16 @@
 
 
 # gr037-ib0
-module purge
+# module purge
 # module load anaconda3/2020.11
 # conda activate torch-env
-# conda activate pytorch
+conda activate covidqa
 # MASTER=`/bin/hostname -s`
 # SLAVES=`scontrol show hostnames $SLURM_JOB_NODELIST | grep -v $MASTER`
 # ADD="tcp://$MASTER:6001"
 
-# echo $SLAVES
-
+echo $(pwd)
+./scripts/covidqa/roberta_base_ce_2gpu.sh
 
 
 
