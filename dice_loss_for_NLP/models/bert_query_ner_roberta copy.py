@@ -10,11 +10,11 @@ from transformers import BertModel, BertPreTrainedModel, RobertaModel
 from models.classifier import SpanClassifier, MultiLayerPerceptronClassifier
 from transformers.modeling_roberta import RobertaPreTrainedModel
 
-class BertForQueryNER(BertPreTrainedModel):
+class BertForQueryNER(RobertaPreTrainedModel):
     def __init__(self, config):
         super(BertForQueryNER, self).__init__(config)
 
-        self.bert = RobertaModel(config)
+        self.roberta = RobertaModel(config)
 
         self.construct_entity_span = config.construct_entity_span
         self.dropout = nn.Dropout(config.hidden_dropout_prob)
@@ -51,7 +51,7 @@ class BertForQueryNER(BertPreTrainedModel):
             match_logits: start-end-match probs of shape [batch, seq_len, seq_len]
         """
 
-        bert_outputs = self.bert(input_ids, token_type_ids=token_type_ids, attention_mask=attention_mask)
+        bert_outputs = self.roberta(input_ids, token_type_ids=token_type_ids, attention_mask=attention_mask)
 
         sequence_heatmap = bert_outputs[0]  # [batch, seq_len, hidden]
         sequence_cls = bert_outputs[1]

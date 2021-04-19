@@ -73,9 +73,9 @@ class BertForNERTask(pl.LightningModule):
 
         print(f"DEBUG INFO -> pred_answerable {self.args.pred_answerable}")
         print(f"DEBUG INFO -> check bert_config \n {bert_config}")
-        # self.tokenizer = AutoTokenizer.from_pretrained(self.model_path, use_fast=False, do_lower_case=self.args.do_lower_case)
+        self.tokenizer = AutoTokenizer.from_pretrained(self.model_path, use_fast=False, do_lower_case=self.args.do_lower_case)
         # self.tokenizer = RobertaTokenizer.from_pretrained(self.model_path, use_fast=False, do_lower_case=self.args.do_lower_case)
-        self.tokenizer = RobertaTokenizer.from_pretrained("roberta-base")
+        # self.tokenizer = RobertaTokenizer.from_pretrained("roberta-base")
         # self.tokenizer = RobertaModel
 
 

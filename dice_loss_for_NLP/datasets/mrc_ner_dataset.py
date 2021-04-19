@@ -48,11 +48,10 @@ class MRCNERDataset(Dataset):
                  pred_answerable=True):
         self.all_data = json.load(open(json_path, encoding="utf-8"))
         self.tokenzier = tokenizer
-        # print(self.tokenzier)
         self.max_length = max_length
         self.do_lower_case = do_lower_case
         self.label2idx = {value:key for key, value in enumerate(MRCNERDataset.get_labels(data_sign))}
-
+# {'context': 'Xinhua News Agency , Canberra , August 31st', 'end_position': [4], 'entity_label': 'GPE', 'impossible': False, 'qas_id': '0.1', 'query': 'geographical political entities are geographical regions defined by political and or social groups such as countries, nations, regions, cities, states, government and its people.', 'span_position': ['4;4'], 'start_position': [4]}
         if prefix == "train" and negative_sampling:
             neg_data_items = [x for x in self.all_data if not x["start_position"]]
             pos_data_items = [x for x in self.all_data if x["start_position"]]
@@ -89,6 +88,7 @@ class MRCNERDataset(Dataset):
         data = self.all_data[item]
         # print(data)
         tokenizer = self.tokenzier
+        # print(tokenizer)
         label_idx = torch.tensor(self.label2idx[data["entity_label"]], dtype=torch.long)
 
         if self.is_chinese:
@@ -107,7 +107,6 @@ class MRCNERDataset(Dataset):
             return_overflowing_tokens=True,
             return_token_type_ids=True)
 
-        # print(query_context_tokens)
 
         if tokenizer.pad_token_id in query_context_tokens["input_ids"]:
             non_padded_ids = query_context_tokens["input_ids"][: query_context_tokens["input_ids"].index(tokenizer.pad_token_id)]
@@ -116,7 +115,7 @@ class MRCNERDataset(Dataset):
 
         non_pad_tokens = tokenizer.convert_ids_to_tokens(non_padded_ids)
 
-        first_sep_token = non_pad_tokens.index("</s>")
+        first_sep_token = non_pad_tokens.index("[SEP]")
         end_sep_token = len(non_pad_tokens) - 1
         new_start_positions = []
         new_end_positions = []
@@ -134,6 +133,7 @@ class MRCNERDataset(Dataset):
             new_end_positions = end_positions
 
         # clip out-of-boundary entity positions.
+        # print(new_start_positions)
         new_start_positions = [start_pos for start_pos in new_start_positions if start_pos < self.max_length]
         new_end_positions = [end_pos for end_pos in new_end_positions if end_pos < self.max_length]
 

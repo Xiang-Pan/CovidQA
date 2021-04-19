@@ -3,8 +3,7 @@
 #SBATCH --nodes=1                # node count
 #SBATCH --ntasks=1               # total number of tasks across all nodes
 #SBATCH --cpus-per-task=8        # cpu-cores per task (>1 if multi-threaded tasks)
-#SBATCH --mem=32G                # total memory per node (4 GB per cpu-core is default)
-#SBATCH --gres=gpu:2             # number of gpus per node
+#SBATCH --mem=16G                # total memory per node (4 GB per cpu-core is default)
 #SBATCH --time=168:00:00          # total run time limit (HH:MM:SS)
 #SBATCH --mail-type=begin        # send mail when job begins
 #SBATCH --mail-type=end          # send mail when job ends
@@ -16,13 +15,14 @@
 # module purge
 # module load anaconda3/2020.11
 # conda activate torch-env
-conda activate covidqa
+# conda activate covidqa
 # MASTER=`/bin/hostname -s`
 # SLAVES=`scontrol show hostnames $SLURM_JOB_NODELIST | grep -v $MASTER`
 # ADD="tcp://$MASTER:6001"
+MODEL_DIR="./outputs"
 
 echo $(pwd)
-./scripts/squad1/roberta_base_ce_2gpu.sh
+tensorboard --logdir="${MODEL_DIR}" 
 
 
 

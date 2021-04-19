@@ -22,7 +22,7 @@ conda activate covidqa
 # ADD="tcp://$MASTER:6001"
 
 echo $(pwd)
-./scripts/squad1/roberta_base_ce_2gpu.sh
+./scripts/covidqa/roberta_base_ce_2gpu.sh
 
 
 

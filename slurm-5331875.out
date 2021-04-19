@@ -1,0 +1,4 @@
+/opt/slurm/data/slurmd/job5331875/slurm_script: line 22: MODEL_DIR: command not found
+/scratch/xp2030/CovidQA
+TensorFlow installation not found - running with reduced feature set.
+Error: A logdir or db must be specified. For example `tensorboard --logdir mylogdir` or `tensorboard --db sqlite:~/.tensorboard.db`. Run `tensorboard --helpfull` for details and examples.
