@@ -363,7 +363,7 @@ def main():
         model.load_state_dict(torch.load(args.pretrained_checkpoint,map_location=torch.device('cpu'))["state_dict"])
 
     checkpoint_callback = ModelCheckpoint(
-        dirpath=args.default_root_dir,
+        filepath=args.default_root_dir,
         save_top_k=10,
         verbose=True,
         monitor="span_f1",
