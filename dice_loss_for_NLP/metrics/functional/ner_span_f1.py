@@ -80,7 +80,7 @@ def bmes_decode(char_label_list: List[Tuple[str, str]]) -> List[Tag]:
 
 def bmes_decode_flat_query_span_f1(start_preds, end_preds, match_logits, start_end_label_mask, start_labels, end_labels, match_labels, answerable_pred=None):
     sum_true_positive, sum_false_positive, sum_false_negative = 0, 0, 0
-    # print(start_preds)
+    print(start_labels)
     start_preds, end_preds, match_logits, start_end_label_mask = start_preds.to("cpu").numpy().tolist(), end_preds.to("cpu").numpy().tolist(), match_logits.to("cpu").numpy().tolist(), start_end_label_mask.to("cpu").numpy().tolist()
     start_labels, end_labels, match_labels = start_labels.to("cpu").numpy().tolist(), end_labels.to("cpu").numpy().tolist(), match_labels.to("cpu").numpy().tolist()
     answerable_pred = answerable_pred.to("cpu").numpy().tolist()

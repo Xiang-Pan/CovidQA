@@ -73,6 +73,9 @@ class BertForNERTask(pl.LightningModule):
 
         print(f"DEBUG INFO -> pred_answerable {self.args.pred_answerable}")
         print(f"DEBUG INFO -> check bert_config \n {bert_config}")
+        from tokenizers import BertWordPieceTokenizer
+
+        #self.tokenizer = BertWordPieceTokenizer(os.path.join(self.model_path, "vocab.json"))
         self.tokenizer = AutoTokenizer.from_pretrained(self.model_path, use_fast=False, do_lower_case=self.args.do_lower_case)
         # self.tokenizer = RobertaTokenizer.from_pretrained(self.model_path, use_fast=False, do_lower_case=self.args.do_lower_case)
         # self.tokenizer = RobertaTokenizer.from_pretrained("roberta-base")
@@ -208,6 +211,7 @@ class BertForNERTask(pl.LightningModule):
                      & end_labels.unsqueeze(-2).expand(-1, seq_len, -1))
                 )
             elif self.args.span_loss_candidates == "gold_pred_random":
+                # here
                 gold_and_pred = torch.logical_or(
                     (start_preds.unsqueeze(-1).expand(-1, -1, seq_len)
                      & end_preds.unsqueeze(-2).expand(-1, seq_len, -1)),
@@ -229,11 +233,15 @@ class BertForNERTask(pl.LightningModule):
 
         if self.loss_type == "bce":
             start_end_logits_size = start_logits.shape[-1]
+            # print(start_end_logits_size)
             if start_end_logits_size == 1:
                 loss_fct = BCEWithLogitsLoss(reduction="none")
                 # print(start_logits,start_labels)
                 start_loss = loss_fct(start_logits.view(-1), start_labels.view(-1).float())
+                # print(start_loss)
                 start_loss = (start_loss * start_float_label_mask).sum() / start_float_label_mask.sum()
+
+                # print(start_loss)
                 end_loss = loss_fct(end_logits.view(-1), end_labels.view(-1).float())
                 end_loss = (end_loss * end_float_label_mask).sum() / end_float_label_mask.sum()
             elif start_end_logits_size == 2:

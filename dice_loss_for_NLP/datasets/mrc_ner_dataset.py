@@ -9,7 +9,6 @@ from torch.utils.data import Dataset
 from transformers import AutoTokenizer
 from datasets.data_sampling import sample_positive_and_negative_by_ratio
 
-
 def _improve_answer_span(doc_tokens, input_start, input_end, tokenizer, orig_answer_text, return_subtoken_start=False):
     """Returns tokenized answer spans that better match the annotated answer."""
     doc_tokens = [str(tmp) for tmp in doc_tokens]
@@ -32,6 +31,43 @@ def _improve_answer_span(doc_tokens, input_start, input_end, tokenizer, orig_ans
 
     return (input_start, input_end)
 
+# def _improve_answer_span(doc_tokens, input_start, input_end, tokenizer, orig_answer_text, return_subtoken_start=False):
+#     """Returns tokenized answer spans that better match the annotated answer."""
+#     # print("doc_tokens",doc_tokens)
+#     doc_tokens = [str(tmp) for tmp in doc_tokens]
+    
+#     answer_tokens = tokenizer.encode(orig_answer_text, add_special_tokens=False)
+#     tok_answer_text = " ".join([str(tmp) for tmp in answer_tokens])
+    
+#     answer_string = tokenizer.convert_tokens_to_string(tokenizer.convert_ids_to_tokens(answer_tokens))
+#     # print(answer_string)
+    
+#     for new_start in range(input_start, input_end + 1):
+#         for new_end in range(input_end, new_start - 1, -1):
+#     # for new_start in range(0, len(doc_tokens) + 1): 
+#     #     for new_end in range(len(doc_tokens) + 1, new_start - 1, -1):
+#             text_span_tokens = " ".join(doc_tokens[new_start : (new_end+1)])
+#             text_span_string = tokenizer.convert_tokens_to_string(tokenizer.convert_ids_to_tokens(doc_tokens[new_start : (new_end+1)]))
+#             # print("text_span",text_span_string,"tok_answer_text",answer_string)
+#             # if text_span == tok_answer_text:
+#             if text_span_string == answer_string:
+#                 # print(text_span_string,answer_string)
+                
+#                 if not return_subtoken_start:
+#                     return (new_start, new_end)
+#                 tokens = tokenizer.convert_ids_to_tokens(doc_tokens[new_start: (new_end + 1)])
+#                 # print("here",new_start,new_end,doc_tokens[new_start,new_end])
+#                 if "##" not in tokens[-1]:
+                    
+#                     return (new_start, new_end)
+#                 else:
+#                     for idx in range(len(tokens)-1, -1, -1):
+#                         if "##" not in tokens[idx]:
+#                             new_end = new_end - (len(tokens)-1 - idx)
+#                             return (new_start, new_end)
+#     print("not found!!!")
+#     return (input_start, input_end)
+
 
 class MRCNERDataset(Dataset):
     """
@@ -52,6 +88,7 @@ class MRCNERDataset(Dataset):
         self.do_lower_case = do_lower_case
         self.label2idx = {value:key for key, value in enumerate(MRCNERDataset.get_labels(data_sign))}
 # {'context': 'Xinhua News Agency , Canberra , August 31st', 'end_position': [4], 'entity_label': 'GPE', 'impossible': False, 'qas_id': '0.1', 'query': 'geographical political entities are geographical regions defined by political and or social groups such as countries, nations, regions, cities, states, government and its people.', 'span_position': ['4;4'], 'start_position': [4]}
+        negative_sampling = False
         if prefix == "train" and negative_sampling:
             neg_data_items = [x for x in self.all_data if not x["start_position"]]
             pos_data_items = [x for x in self.all_data if x["start_position"]]
@@ -65,6 +102,7 @@ class MRCNERDataset(Dataset):
 
         self.is_chinese = is_chinese
         self.pad_to_maxlen = pad_to_maxlen
+        # self.pred_answerable = pred_answerable
         self.pred_answerable = pred_answerable
 
     def __len__(self):
@@ -86,7 +124,7 @@ class MRCNERDataset(Dataset):
 
         """
         data = self.all_data[item]
-        # print(data)
+        # print(data["query"],data["context"])
         tokenizer = self.tokenzier
         # print(tokenizer)
         label_idx = torch.tensor(self.label2idx[data["entity_label"]], dtype=torch.long)
@@ -101,24 +139,72 @@ class MRCNERDataset(Dataset):
         start_positions = data["start_position"]
         end_positions = data["end_position"]
 
+
         query_context_tokens = tokenizer.encode_plus(query, context,
             add_special_tokens=True,
             max_length=self.max_length,
             return_overflowing_tokens=True,
             return_token_type_ids=True)
+        
+        # RoBERTa doesn’t have token_type_ids, you don’t need to indicate which token belongs to which segment. Just separate your segments with the separation token tokenizer.sep_token (or </s>)
+        # print(query_context_tokens)
 
+        # query_context_tokens = tokenizer.encode(query, context,
+        #     add_special_tokens=True,
+        #     max_length=self.max_length,
+        #     return_overflowing_tokens=True,
+        #     return_token_type_ids=True)
+        
+        # res = tokenizer.encode(text=query,text_pair = context, add_special_tokens= True,max_length=self.max_length,return_overflowing_tokens=True,return_token_type_ids= True )
+        # print(res)
+        # print(tokenizer(query,add_special_tokens= False))
+        # query_ids = tokenizer(query,add_special_tokens= False)['input_ids']
+        # context_ids = tokenizer(context,add_special_tokens= False)['input_ids']
+
+        # encodings = tokenizer.batch_encode_plus([query],[context], pad_to_max_length=True,max_length=self.max_length, return_token_type_ids=True)
+        # print(encodings)
+        # query_context_tokens["input_ids"] = tokenizer.build_inputs_with_special_tokens(query_ids,context_ids)
+        # query_context_tokens["token_type_ids"] = tokenizer.create_token_type_ids_from_sequences(query_ids,context_ids)
+        # print(query_context_tokens)
 
         if tokenizer.pad_token_id in query_context_tokens["input_ids"]:
             non_padded_ids = query_context_tokens["input_ids"][: query_context_tokens["input_ids"].index(tokenizer.pad_token_id)]
         else:
             non_padded_ids = query_context_tokens["input_ids"]
-
+    
+        # non_pad_tokens =  non_padded_ids
         non_pad_tokens = tokenizer.convert_ids_to_tokens(non_padded_ids)
+        
+        # print("non_pad_tokens",non_pad_tokens)
 
-        first_sep_token = non_pad_tokens.index("[SEP]")
+        # first_sep_token = non_pad_tokens.index("[SEP]")
+        first_sep_token = non_pad_tokens.index(tokenizer.sep_token) 
+        
+        # print(non_pad_tokens)
+        # 
         end_sep_token = len(non_pad_tokens) - 1
         new_start_positions = []
         new_end_positions = []
+        # print(start_positions)
+        # def f(a,b):
+        #     for i in range(0,len(a)):
+        # #         print(i)
+        #         for j in range(0,len(a)):
+        # #             print(b,a[i:j+1],a[i:j+1] == b)
+        #             if a[i:j+1] == b:
+        #                 return i,j
+        #     print(a,b)
+
+        # def search(ids,answer_text_span):
+        #     n = len(ids)
+        #     for i in range(0,n):
+        #         for j in range(i,n):
+        #             candi = tokenizer.decode(ids[i:j])
+        #             # print(candi,answer_text_span)
+        #             if  candi.strip()== answer_text_span.strip():
+        #                 return i,j
+        #     return None
+
         if len(start_positions) != 0:
             for start_index, end_index in zip(start_positions, end_positions):
                 if self.is_chinese:
@@ -132,27 +218,70 @@ class MRCNERDataset(Dataset):
             new_start_positions = start_positions
             new_end_positions = end_positions
 
+        # if len(start_positions) != 0:
+        #     for start_index, end_index in zip(start_positions, end_positions):
+        #         if self.is_chinese:
+        #             answer_text_span = " ".join(context[start_index: end_index+1])
+        #         else:
+        #             answer_text_span = " ".join(context.split(" ")[start_index: end_index+1])
+        #         # print(answer_text_span)
+        #         res = search(query_context_tokens["input_ids"] ,answer_text_span)
+        #         if res is None:
+        #             new_start, new_end =  start_index,end_index
+        #         else: 
+        #             new_start, new_end = res
+        #         # try:
+        #         #     new_start = query_context_tokens.char_to_token(0,start_index)
+        #         #     new_end = query_context_tokens.char_to_token(0,end_index-1)
+        #         # except:
+        #         #     # print("start_index",start_index, query_context_tokens)
+        #         #     new_start = start_index
+        #         #     new_end = end_index
+        #         # print(start_index,end_index)
+        #         # print("new_start",new_start, "new_end",new_end)
+        #         # span = context_ids[start_index:end_index+1]
+        #         # id_start_index = 
+        #         # id_end_index = 
+        #         # print(context,"span",span)
+        #         new_start_positions.append(new_start)
+        #         new_end_positions.append(new_end)
+        # else:
+        #     new_start_positions = start_positions
+        #     new_end_positions = end_positions
+
         # clip out-of-boundary entity positions.
+        # print(new_start_positions,new_end_positions)
         # print(new_start_positions)
         new_start_positions = [start_pos for start_pos in new_start_positions if start_pos < self.max_length]
         new_end_positions = [end_pos for end_pos in new_end_positions if end_pos < self.max_length]
 
+
         tokens = query_context_tokens["input_ids"]
+        # print(tokens)
         token_type_ids = query_context_tokens['token_type_ids']
+        # print(token_type_ids)
+        # token_type_ids[first_sep_token:] = [1] * len(token_type_ids[first_sep_token:])
+        # print(token_type_ids)
+
         # token_type_ids -> 0 for query tokens and 1 for context tokens.
         attention_mask = query_context_tokens['attention_mask']
         start_labels = [(1 if idx in new_start_positions else 0) for idx in range(len(tokens))]
         end_labels = [(1 if idx in new_end_positions else 0) for idx in range(len(tokens))]
+        # print("token_type_ids",token_type_ids)
         label_mask = [1 if token_type_ids[token_idx] == 1 else 0 for token_idx in range(len(tokens))]
+
+
+        label_mask = [0 for i in range(first_sep_token)] + [1 for i in range(first_sep_token,len(tokens))]
         start_label_mask = label_mask.copy()
         end_label_mask = label_mask.copy()
-
+        
         seq_len = len(tokens)
         match_labels = torch.zeros([seq_len, seq_len], dtype=torch.long)
         for start, end in zip(new_start_positions, new_end_positions):
             if start >= seq_len or end >= seq_len:
                 continue
             match_labels[start, end] = 1
+
 
         if self.pred_answerable:
             answerable_label = 1 if len(new_start_positions) != 0 else 0

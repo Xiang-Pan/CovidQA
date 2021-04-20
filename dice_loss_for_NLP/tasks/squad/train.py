@@ -72,6 +72,8 @@ class BertForQA(pl.LightningModule):
         # NOTICE: https://github.com/huggingface/transformers/issues/7735
         # fast tokenizers don’t currently work with the QA pipeline.
         # print(self.model_path,"self.model_path")
+        # from tokenizers import BertWordPieceTokenizer
+
         self.tokenizer = AutoTokenizer.from_pretrained(self.model_path, use_fast=False, do_lower_case=self.args.do_lower_case)
 
         self.dev_cached_file = os.path.join(self.args.data_dir, "cached_{}_{}_{}_{}".format("dev",

@@ -16,13 +16,17 @@ def collate_to_max_length(batch: List[List[torch.Tensor]]) -> List[torch.Tensor]
         output: list of field batched data, which shape is [batch, max_length]
     """
     batch_size = len(batch)
+    # print(batch)
     max_length = max(x[0].shape[0] for x in batch)
     output = []
 
     for field_idx in range(7):
         pad_output = torch.full([batch_size, max_length], 0, dtype=batch[0][field_idx].dtype)
+        # print(pad_output.shape)
         for sample_idx in range(batch_size):
             data = batch[sample_idx][field_idx]
+            # data = data.squeeze()
+            # print(data)
             pad_output[sample_idx][: data.shape[0]] = data
         output.append(pad_output)
 
