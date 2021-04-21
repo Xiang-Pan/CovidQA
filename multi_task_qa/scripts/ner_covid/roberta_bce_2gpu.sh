@@ -6,7 +6,7 @@ FILE_NAME=brain_enonto_dice
 REPO_PATH=$(pwd)
 echo $REPO_PATH
 MODEL_SCALE=base
-DATA_DIR=$REPO_PATH/datasets/ace2004
+DATA_DIR=$REPO_PATH/datasets/covidner_nonoverlapping_mrc
 
 #! BERT VERSION
 BERT_TYPE=roberta-base
@@ -90,8 +90,7 @@ python ${REPO_PATH}/tasks/mrc_ner/train.py \
 --construct_entity_span start_and_end \
 --num_labels 1 \
 --flat_ner \
---activate_func relu \
 --pred_answerable \
 --answerable_task_ratio 0.2 \
---data_sign ace2004
-
+--activate_func relu \
+--data_sign covidner
