@@ -12,7 +12,7 @@ DATA_DIR=$REPO_PATH/datasets/covidner_nonoverlapping_mrc
 BERT_TYPE=bert-base-uncased
 BERT_DIR=$REPO_PATH/cached_models/$BERT_TYPE
 
-TRAIN_BATCH_SIZE=12
+TRAIN_BATCH_SIZE=32
 EVAL_BATCH_SIZE=1
 MAX_LENGTH=300
 
@@ -91,6 +91,6 @@ python ${REPO_PATH}/tasks/mrc_ner/train.py \
 --num_labels 1 \
 --flat_ner \
 --pred_answerable \
---answerable_task_ratio 0.2 \
+--answerable_task_ratio 1 \
 --activate_func relu \
---data_sign ace2004
+--data_sign covidner

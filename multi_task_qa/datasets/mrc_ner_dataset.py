@@ -124,9 +124,7 @@ class MRCNERDataset(Dataset):
 
         """
         data = self.all_data[item]
-        # print(data["query"],data["context"])
         tokenizer = self.tokenzier
-        # print(tokenizer)
         label_idx = torch.tensor(self.label2idx[data["entity_label"]], dtype=torch.long)
 
         if self.is_chinese:
@@ -320,6 +318,20 @@ class MRCNERDataset(Dataset):
             return ["ORG", "PER", "LOC", "MISC"]
         elif data_sign == "ace2004":
             return ["ORG", "PER", "LOC", "MISC","GPE","FAC","VEH","WEA"]
+        elif data_sign == "covidner":
+            return ["DISO", "SPEC", "CHED", "PRGE","ENZY","ANAT","PROC","FUNC","COMP","PATH","MRNA"] 
         return ["0", "1"]
 
 
+
+# // Disorder (DISO): UMLS
+# // Species (SPEC): NCBI Taxonomy
+# // Chemical or Drug (CHED): ChEBI
+# // Gene or Protein (PRGE): NER with CRFs and normalization with UniProt
+# // Enzyme (ENZY): ExPASy
+# // Anatomy (ANAT): Unified Medical Language System (UMLS)
+# // Biological Process (PROC): Gene Ontology (GO) and UMLS
+# // Molecular Function (FUNC): Gene Ontology (GO)
+# // Cellular Component (COMP): Gene Ontology (GO)
+# // Pathway (PATH): NCBI BioSystems
+# // microRNA (MRNA): miRBase
