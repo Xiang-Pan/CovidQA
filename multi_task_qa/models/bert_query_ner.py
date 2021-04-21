@@ -97,6 +97,4 @@ class BertForQueryNER(BertPreTrainedModel):
             cls_logits = self.answerable_cls_output(sequence_cls)
             return start_logits, end_logits, span_logits, cls_logits
         
-
-        
         return start_logits, end_logits, span_logits

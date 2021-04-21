@@ -1,0 +1,25 @@
+{
+    "DISO": "Disorder",
+    "SPEC": "Species",
+    "PRGE": "Gene or Protein ",
+    "ENZY": "Enzyme",
+    "ANAT": "Anatomy",
+    "PROC": "Biological Process",
+    "FUNC": " Molecular Function",
+    "COMP": "Cellular Component",
+    "PATH": "Pathway",
+    "MRNA": "microRNA"
+}
+
+
+// Disorder (DISO): UMLS
+// Species (SPEC): NCBI Taxonomy
+// Chemical or Drug (CHED): ChEBI
+// Gene or Protein (PRGE): NER with CRFs and normalization with UniProt
+// Enzyme (ENZY): ExPASy
+// Anatomy (ANAT): Unified Medical Language System (UMLS)
+// Biological Process (PROC): Gene Ontology (GO) and UMLS
+// Molecular Function (FUNC): Gene Ontology (GO)
+// Cellular Component (COMP): Gene Ontology (GO)
+// Pathway (PATH): NCBI BioSystems
+// microRNA (MRNA): miRBase
