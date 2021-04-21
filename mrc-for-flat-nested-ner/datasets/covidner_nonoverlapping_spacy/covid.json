@@ -1,0 +1,12 @@
+{
+    "DISO": "Disorder",
+    "SPEC": "Species",
+    "PRGE": "Gene or Protein ",
+    "ENZY": "Enzyme",
+    "ANAT": "Anatomy",
+    "PROC": "Biological Process",
+    "FUNC": " Molecular Function",
+    "COMP": "Cellular Component",
+    "PATH": "Pathway",
+    "MRNA": "microRNA"
+}
