@@ -2,3 +2,4 @@
 TensorFlow installation not found - running with reduced feature set.
 Serving TensorBoard on localhost; to expose to the network, use a proxy or pass --bind_all
 TensorBoard 2.2.0 at http://localhost:6006/ (Press CTRL+C to quit)
+slurmstepd: error: *** JOB 5331888 ON cs025-ib0 CANCELLED AT 2021-04-21T01:06:46 ***
