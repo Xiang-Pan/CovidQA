@@ -18,7 +18,7 @@ DATALOADER:0 TEST RESULTS
 # Table
 | Training    | Test |
 | ----------- | ----------- |
-| squad1  (span_f1:       90.41)   | CovidQA(42.04)        |
+| squad1  (span_f1:       90.41)   | squad1(42.04)        |
 | squad1  (span_f1:       90.41)   | CovidQA(42.04)        |
 <!-- | squad1 + DAPT   | CovidQA(28.84)        |
 |ace_2004(MRC_NER span_f1:0.6681)|CovidQA(2.27)|
