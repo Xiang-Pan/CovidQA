@@ -1,0 +1,5 @@
+adam_beta1: 0.9
+adam_beta2: 0.999
+adam_epsilon: 1.0e-08
+learning_rate: 5.0e-05
+model_name_or_path: ../multi_task_qa/cached_models/roberta-base/
