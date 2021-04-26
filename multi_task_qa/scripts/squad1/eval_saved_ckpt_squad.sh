@@ -8,12 +8,16 @@ export PYTHONPATH="$PYTHONPATH:$REPO_PATH"
 
 # OUTPUT_DIR=/data/xiaoya/outputs/dice_loss/squad/gpu4_ce_base_2_1.0_1__adamw_3e-5_0.1_12_64_384_128
 
-TASK_NAME=squad
+TASK_NAME=squad1
 
-OUTPUT_DIR=$REPO_PATH/outputs/ce_loss/$TASK_NAME/reproduce_bert_base_ce
+# OUTPUT_DIR=$REPO_PATH/outputs/ce_loss/$TASK_NAME/reproduce_bert_base_ce
 
-MODEL_CKPT=${OUTPUT_DIR}/epoch=1.ckpt
-HPARAMS_PATH=${OUTPUT_DIR}/lightning_logs/version_4/hparams.yaml
+# MODEL_CKPT=${OUTPUT_DIR}/epoch=1.ckpt
+
+
+MODEL_CKPT=$REPO_PATH/cached_models/roberta_squad1_2epoch.ckpt
+
+HPARAMS_PATH=${REPO_PATH}/outputs/roberta-base/squad1/lightning_logs/squad1_squad1/hparams.yaml
 
 # CUDA_VISIBLE_DEVICES=3 
 python ${REPO_PATH}/tasks/squad/evaluate_models.py \
