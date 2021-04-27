@@ -30,8 +30,8 @@ from models.model_config import BertForQAConfig
 from models.bert_qa import BertForQuestionAnswering
 from loss import DiceLoss, FocalLoss
 from utils.get_parser import get_parser
-from datasets.squad_dataset import SquadDataset
-from datasets.truncate_dataset import TruncateDataset
+from task_datasets.squad_dataset import SquadDataset
+from task_datasets.truncate_dataset import TruncateDataset
 from metrics.squad_em_f1 import SquadEvalMetric
 
 from models.model_config import BertForQueryNERConfig

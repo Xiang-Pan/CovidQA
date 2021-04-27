@@ -15,11 +15,21 @@ DATALOADER:0 TEST RESULTS
  'span_f1': 42.048515687609324,
  'val_loss': tensor(0.8771, device='cuda:0')}
 
+# COVIDQA_COVIDQA
+{'exact_match': 25.99009900990099,
+ 'span_f1': 50.196758879478054,
+ 'val_loss': tensor(0.1942, device='cuda:0')}
+
+
+
 # Table
 | Training    | Test |
 | ----------- | ----------- |
-| squad1  (span_f1:       90.41)   | squad1(42.04)        |
+| squad1 (span_f1:       90.41)   |   |
+| CovidQA (span_f1:       50.19)   |    |
 | squad1  (span_f1:       90.41)   | CovidQA(42.04)        |
+
+
 <!-- | squad1 + DAPT   | CovidQA(28.84)        |
 |ace_2004(MRC_NER span_f1:0.6681)|CovidQA(2.27)|
 |ace_2004_BERT + squad1_classifier|CovidQA(3.21)|
