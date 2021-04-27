@@ -6,12 +6,24 @@ export PYTHONPATH="$PYTHONPATH:$REPO_PATH"
 
 TASK_NAME=squad1
 
-OUTPUT_DIR=$REPO_PATH/outputs/ce_loss/$TASK_NAME/reproduce_bert_base_ce
 
-MODEL_CKPT=${OUTPUT_DIR}/epoch=0_v0.ckpt
-HPARAMS_PATH=${OUTPUT_DIR}/lightning_logs/version_0/hparams_transfer.yaml
+TASK_NAME=squad1
+DATA_DIR=$REPO_PATH/datasets/$TASK_NAME
+
+#! BERT VERSION
+BERT_TYPE=roberta-base
+
+BERT_DIR=$REPO_PATH/cached_models/$BERT_TYPE
+
+OUTPUT_DIR_BASE=$REPO_PATH/outputs
+OUTPUT_DIR=${OUTPUT_DIR_BASE}/$BERT_TYPE/$TASK_NAME
+
+# OUTPUT_DIR=$REPO_PATH/outputs/ce_loss/$TASK_NAME/reproduce_bert_base_ce
+
+MODEL_CKPT=${OUTPUT_DIR}/epoch=1.ckpt
+HPARAMS_PATH=${OUTPUT_DIR}/lightning_logs/version_0/hparams.yaml
 # MODEL_CKPT="/home/xiangpan/Labs/CovidQA/dice_loss_for_NLP/outputs/bce/mrc_ner/brain_enonto_dice_base_12_300_2e-5_linear_0.1_6_5_1.0_0.002_0.1_1_1_0.3_bce/epoch=4.ckpt"
-HPARAMS_PATH=${OUTPUT_DIR}/lightning_logs/version_0/hparams_transfer.yaml
+HPARAMS_PATH=${OUTPUT_DIR}/lightning_logs/version_0/hparams.yaml
 
 # CUDA_VISIBLE_DEVICES=3 
 python ${REPO_PATH}/tasks/squad/evaluate_models.py \

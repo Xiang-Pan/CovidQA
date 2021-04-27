@@ -23,7 +23,7 @@ conda activate covidqa
 
 echo $(pwd)
 # ./scripts/covidqa/roberta_base_ce_2gpu.sh
-./scripts/ner_covid/roberta_bce.sh 
+./scripts/ner_ace2004/roberta_bce.sh 
 
 
 
