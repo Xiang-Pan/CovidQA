@@ -15,7 +15,7 @@ TASK_NAME=squad1
 # MODEL_CKPT=${OUTPUT_DIR}/epoch=1.ckpt
 
 
-MODEL_CKPT=$REPO_PATH/cached_models/roberta_squad1_2epoch/roberta_squad1_2epoch.ckpt
+MODEL_CKPT=$REPO_PATH/cached_models/roberta_squad1_2epoch_covidqcls_3epoch/roberta_squad1_2epoch_covidqcls_3epoch.ckpt
 
 HPARAMS_PATH=${REPO_PATH}/outputs/roberta-base/squad1/lightning_logs/squad1_covidqa/hparams.yaml
 

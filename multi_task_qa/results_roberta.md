@@ -14,6 +14,8 @@ DATALOADER:0 TEST RESULTS
 {'exact_match': 24.752475247524753,
  'span_f1': 42.048515687609324,
  'val_loss': tensor(0.8771, device='cuda:0')}
+
+
 <!-- 
 - second run
 
@@ -35,10 +37,14 @@ DATALOADER:0 TEST RESULTS
  'span_f1': 50.196758879478054,
  'val_loss': tensor(0.1942, device='cuda:0')}
 
-# COVIDQ_CLS
+# COVIDQ_CLS(Covid Quesetion Text Classification)
+f1 0.69735 (best 0.69735)
 
-
-
+# SQUAD1_COVIDQCLS_COVIDQA
+DATALOADER:0 TEST RESULTS
+{'exact_match': 24.752475247524753,
+ 'span_f1': 42.158526688709436,
+ 'val_loss': tensor(0.8771, device='cuda:0')}
 
 
 # Table
@@ -46,9 +52,11 @@ DATALOADER:0 TEST RESULTS
 | ----------- | ----------- |
 | squad1 (span_f1:       90.41)   |   |
 | CovidQA (span_f1:       50.19)   |    |
-| squad1  (span_f1:       90.41)   | CovidQA(42.04)        |
 | squad1_mlm  | CovidQA(24.52)        |
-| squad1_coivdq_cls  | CovidQA(24.52)        |
+| squad1_mlm  | CovidQA(24.52)        |
+| squad1    | CovidQA(42.04)        |
+| squad1 + covidqcls     | CovidQA(42.15)        |
+
 
 <!-- | squad1 + DAPT   | CovidQA(28.84)        |
 |ace_2004(MRC_NER span_f1:0.6681)|CovidQA(2.27)|

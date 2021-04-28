@@ -10,15 +10,11 @@ REPO_PATH=$(pwd)
 # MODEL_SCALE=base
 #! NOTICE HERE
 TASK_NAME=covidq_cls
-DATA_DIR=$REPO_PATH/datasets/$TASK_NAME
+DATA_DIR=$REPO_PATH/task_datasets/$TASK_NAME
 
 #! BERT VERSION
-BERT_TYPE=bert-base-uncased
+BERT_TYPE=roberta_squad1_2epoch
 BERT_DIR=$REPO_PATH/cached_models/$BERT_TYPE
-
-
-DATA_DIR=$REPO_PATH/task_datasets/tnews_public_data
-
 
 TRAIN_BATCH_SIZE=36
 EVAL_BATCH_SIZE=12

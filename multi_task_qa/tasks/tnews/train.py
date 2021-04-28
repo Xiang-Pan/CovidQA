@@ -58,7 +58,8 @@ class TNewsClassificationTask(pl.LightningModule):
                                                                         #   hidden_dropout_prob=self.args.bert_hidden_dropout,)
         # self.tokenizer = BertWordPieceTokenizer(os.path.join(self.model_path, "vocab.txt"), lowercase=False)
         # self.model = BertForSequenceClassification.from_pretrained(self.model_path, config=bert_config)
-        self.tokenizer = RobertaTokenizer.from_pretrained(self.model_path, use_fast=False, do_lower_case=True)
+        # print(self.model_path)
+        self.tokenizer = RobertaTokenizer.from_pretrained(self.model_path, use_fast=False, do_lower_case=True,max_length=self.args.max_length)
         self.model = RobertaForSequenceClassification.from_pretrained(self.model_path,num_labels=self.num_classes,hidden_dropout_prob=self.args.bert_hidden_dropout,)
 
 
@@ -129,7 +130,7 @@ class TNewsClassificationTask(pl.LightningModule):
         return [optimizer], [{"scheduler": scheduler, "interval": "step"}]
 
     def forward(self, input_ids, token_type_ids, attention_mask):
-        return self.model(input_ids, token_type_ids, attention_mask)
+        return self.model(input_ids, token_type_ids = token_type_ids, attention_mask = attention_mask)
 
     def compute_loss(self, logits, labels, ):
         if self.loss_type == "ce":
@@ -151,7 +152,8 @@ class TNewsClassificationTask(pl.LightningModule):
         tf_board_logs = {"lr": self.trainer.optimizers[0].param_groups[0]['lr']}
 
         input_token_ids, token_type_ids, attention_mask, labels = batch
-        output_logits = self(input_token_ids, token_type_ids, attention_mask)
+        output_logits = self(input_token_ids, token_type_ids, attention_mask)["logits"]
+        # output_logits =
         loss = self.compute_loss(output_logits, labels, )
 
         tf_board_logs[f"loss"] = loss
@@ -160,7 +162,7 @@ class TNewsClassificationTask(pl.LightningModule):
     def validation_step(self, batch, batch_idx):
         output = {}
         input_token_ids, token_type_ids, attention_mask, gold_labels = batch
-        output_logits = self(input_token_ids, token_type_ids, attention_mask)
+        output_logits = self(input_token_ids, token_type_ids, attention_mask)["logits"]
         loss = self.compute_loss(output_logits, gold_labels)
         pred_labels = self._transform_logits_to_labels(output_logits)
         stats_confusion_matrix = self.metric_f1.forward(pred_labels, gold_labels)

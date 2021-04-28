@@ -36,23 +36,30 @@ class TNewsDataset(Dataset):
         data_item = self.data_items[idx]
         data_item = json.loads(data_item)
         label, sentence = data_item["label"], data_item["sentence"]
+        # print(self.labels2id,"!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
         label_id = self.labels2id[label]
         sentence = sentence[: self.max_length-3]
-        tokenizer_output = self.tokenizer.encode(sentence)
+        # ids = self.tokenizer.encode(sentence)
+        tokenizer_output = self.tokenizer.encode_plus(sentence,
+            add_special_tokens=True,
+            max_length=self.max_length,
+            return_token_type_ids=True)
+        # print(tokenizer_output)
 
-        tokens = tokenizer_output.ids + (self.max_length - len(tokenizer_output.ids)) * [0]
-        token_type_ids = tokenizer_output.type_ids + (self.max_length - len(tokenizer_output.type_ids)) * [0]
+        tokens = tokenizer_output.input_ids + (self.max_length - len(tokenizer_output.input_ids)) * [0]
+        token_type_ids = tokenizer_output.token_type_ids + (self.max_length - len(tokenizer_output.token_type_ids)) * [0]
         attention_mask = tokenizer_output.attention_mask + (self.max_length - len(tokenizer_output.attention_mask)) * [0]
 
         input_token_ids = torch.tensor(tokens, dtype=torch.long)
         token_type_ids = torch.tensor(token_type_ids, dtype=torch.long)
         attention_mask = torch.tensor(attention_mask, dtype=torch.long)
         label_id = torch.tensor(label_id, dtype=torch.long)
-
+        # print(attention_mask)
         return input_token_ids, token_type_ids, attention_mask, label_id
 
     @classmethod
     def get_labels(cls, ):
+        return [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14]
         return ['100', '101', '102', '103', '104', '106', '107', '108', '109', '110', '112', '113', '114', '115', '116']
 
 
