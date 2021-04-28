@@ -24,15 +24,15 @@ from torch.nn import functional as F
 from torch.nn.modules import CrossEntropyLoss
 from torch.utils.data.dataloader import DataLoader, RandomSampler, SequentialSampler
 from transformers import AdamW, BertConfig, get_linear_schedule_with_warmup, get_polynomial_decay_schedule_with_warmup
-
+from transformers import AutoTokenizer
 from loss.dice_loss import DiceLoss
 from loss.focal_loss import FocalLoss
-from datasets.tnews_dataset import TNewsDataset
+from task_datasets.tnews_dataset import TNewsDataset
 from utils.get_parser import get_parser
 from metrics.classification_acc_f1 import ClassificationF1Metric
 from models.bert_classification import BertForSequenceClassification
 from models.model_config import BertForSequenceClassificationConfig
-
+from transformers import RobertaTokenizer, RobertaForSequenceClassification
 
 class TNewsClassificationTask(pl.LightningModule):
     def __init__(self, args: argparse.Namespace):
@@ -53,11 +53,14 @@ class TNewsClassificationTask(pl.LightningModule):
         self.train_batch_size = self.args.train_batch_size
         self.eval_batch_size = self.args.eval_batch_size
         self.num_classes = len(TNewsDataset.get_labels())
-        bert_config = BertForSequenceClassificationConfig.from_pretrained(self.model_path,
-                                                                          num_labels=self.num_classes,
-                                                                          hidden_dropout_prob=self.args.bert_hidden_dropout,)
-        self.tokenizer = BertWordPieceTokenizer(os.path.join(self.model_path, "vocab.txt"), lowercase=False)
-        self.model = BertForSequenceClassification.from_pretrained(self.model_path, config=bert_config)
+        # bert_config = BertForSequenceClassificationConfig.from_pretrained(self.model_path,
+                                                                        #   num_labels=self.num_classes,
+                                                                        #   hidden_dropout_prob=self.args.bert_hidden_dropout,)
+        # self.tokenizer = BertWordPieceTokenizer(os.path.join(self.model_path, "vocab.txt"), lowercase=False)
+        # self.model = BertForSequenceClassification.from_pretrained(self.model_path, config=bert_config)
+        self.tokenizer = RobertaTokenizer.from_pretrained(self.model_path, use_fast=False, do_lower_case=True)
+        self.model = RobertaForSequenceClassification.from_pretrained(self.model_path,num_labels=self.num_classes,hidden_dropout_prob=self.args.bert_hidden_dropout,)
+
 
         format = '%(asctime)s - %(name)s - %(message)s'
         logging.basicConfig(format=format, filename=os.path.join(self.args.output_dir, "eval_result_log.txt"), level=logging.INFO)

@@ -45,8 +45,8 @@ def evaluate(args):
         map_location=None,
         batch_size=args.eval_batch_size,)
 
-    mlm_model = RobertaForMaskedLM.from_pretrained('./cached_models/roberta_squad1_2epoch_covidmlm_3epoch/')
-    model.model.roberta.load_state_dict(mlm_model.roberta.state_dict())
+    # mlm_model = RobertaForMaskedLM.from_pretrained('./cached_models/roberta_squad1_2epoch_covidmlm_3epoch/')
+    # model.model.roberta.load_state_dict(mlm_model.roberta.state_dict())
     # # evaluate ner
     # model = BertForNERTask.load_from_checkpoint(
     #     checkpoint_path=args.path_to_model_checkpoint,
