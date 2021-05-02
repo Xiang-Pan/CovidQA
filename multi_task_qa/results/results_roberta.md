@@ -30,7 +30,11 @@ DATALOADER:0 TEST RESULTS
  'span_f1': 24.52323014594557,
  'val_loss': tensor(5.7791, device='cuda:0')}
 
-# SQUAD1_MLM_COVIDQA
+# SQUAD1_MLM_COVIDQA(train_dev)
+DATALOADER:0 TEST RESULTS
+{'exact_match': 11.633663366336634,
+ 'span_f1': 21.088512041983698,
+ 'val_loss': tensor(5.7427, device='cuda:0')}
 
 # COVIDQA_COVIDQA
 {'exact_match': 25.99009900990099,
@@ -46,7 +50,6 @@ DATALOADER:0 TEST RESULTS
  'span_f1': 42.158526688709436,
  'val_loss': tensor(0.8771, device='cuda:0')}
 
-
 # Table
 | Training    | Test |
 | ----------- | ----------- |
@@ -56,6 +59,8 @@ DATALOADER:0 TEST RESULTS
 | squad1_mlm  | CovidQA(24.52)        |
 | squad1    | CovidQA(42.04)        |
 | squad1 + covidqcls     | CovidQA(42.15)        |
+
+
 
 
 <!-- | squad1 + DAPT   | CovidQA(28.84)        |
