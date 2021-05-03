@@ -532,8 +532,7 @@ def main():
     task_model = BertForNERTask(args)
 
     if len(args.pretrained_checkpoint) > 1:
-        task_model.load_state_dict(torch.load(args.pretrained_checkpoint,
-                                              map_location=torch.device("cpu"))["state_dict"])
+        task_model.load_state_dict(torch.load(args.pretrained_checkpoint,map_location=torch.device("cpu"))["state_dict"])
 
     checkpoint_callback = ModelCheckpoint(
         filepath=args.output_dir,

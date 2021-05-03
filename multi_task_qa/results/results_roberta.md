@@ -15,7 +15,8 @@ DATALOADER:0 TEST RESULTS
  'span_f1': 42.048515687609324,
  'val_loss': tensor(0.8771, device='cuda:0')}
 
-
+# COVIDQ_CLS
+VAL F1 0.67801
 <!-- 
 - second run
 

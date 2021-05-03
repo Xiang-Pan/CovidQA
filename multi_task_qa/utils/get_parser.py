@@ -62,5 +62,6 @@ def get_parser() -> argparse.ArgumentParser:
 
 
     parser.add_argument("--load_ner_bert", action="store_true", help="load ner bert")
+    # parser.add_argument("--load_ner_bert", action="store_true", help="load ner bert")
 
     return parser

@@ -32,10 +32,12 @@ from utils.get_parser import get_parser
 from metrics.classification_acc_f1 import ClassificationF1Metric
 from models.bert_classification import BertForSequenceClassification
 from models.model_config import BertForSequenceClassificationConfig
-from transformers import RobertaTokenizer, RobertaForSequenceClassification
+from models.model_config import RobertaForSequenceClassificationConfig
+from models.roberta_classification import RobertaForSequenceClassification
+from transformers import RobertaTokenizer 
 
 class TNewsClassificationTask(pl.LightningModule):
-    def __init__(self, args: argparse.Namespace):
+    def __init__(self, args: argparse.Namespace, roberta_share = None):
         super().__init__()
         if isinstance(args, argparse.Namespace):
             print(f"DEBUG INFO -> save hyperparameters")
@@ -53,6 +55,7 @@ class TNewsClassificationTask(pl.LightningModule):
         self.train_batch_size = self.args.train_batch_size
         self.eval_batch_size = self.args.eval_batch_size
         self.num_classes = len(TNewsDataset.get_labels())
+        
         # bert_config = BertForSequenceClassificationConfig.from_pretrained(self.model_path,
                                                                         #   num_labels=self.num_classes,
                                                                         #   hidden_dropout_prob=self.args.bert_hidden_dropout,)
@@ -60,7 +63,9 @@ class TNewsClassificationTask(pl.LightningModule):
         # self.model = BertForSequenceClassification.from_pretrained(self.model_path, config=bert_config)
         # print(self.model_path)
         self.tokenizer = RobertaTokenizer.from_pretrained(self.model_path, use_fast=False, do_lower_case=True,max_length=self.args.max_length)
-        self.model = RobertaForSequenceClassification.from_pretrained(self.model_path,num_labels=self.num_classes,hidden_dropout_prob=self.args.bert_hidden_dropout,)
+        # self.roberta = Roberta
+        roberta_config = BertForSequenceClassificationConfig.from_pretrained(self.model_path,num_labels=self.num_classes,hidden_dropout_prob=self.args.bert_hidden_dropout,) 
+        self.model = RobertaForSequenceClassification.from_pretrained(self.model_path,num_labels=self.num_classes,hidden_dropout_prob=self.args.bert_hidden_dropout,roberta_share = roberta_share)
 
 
         format = '%(asctime)s - %(name)s - %(message)s'
@@ -130,7 +135,11 @@ class TNewsClassificationTask(pl.LightningModule):
         return [optimizer], [{"scheduler": scheduler, "interval": "step"}]
 
     def forward(self, input_ids, token_type_ids, attention_mask):
-        return self.model(input_ids, token_type_ids = token_type_ids, attention_mask = attention_mask)
+        
+        # bert_cls_output = bert_outputs[1]
+        # bert_cls_output = self.dropout(bert_cls_output)
+        # cls_logits = self.cls_classifier(bert_cls_output)
+        return self.model(input_ids, token_type_ids = token_type_ids, attention_mask = attention_mask) 
 
     def compute_loss(self, logits, labels, ):
         if self.loss_type == "ce":
@@ -152,7 +161,7 @@ class TNewsClassificationTask(pl.LightningModule):
         tf_board_logs = {"lr": self.trainer.optimizers[0].param_groups[0]['lr']}
 
         input_token_ids, token_type_ids, attention_mask, labels = batch
-        output_logits = self(input_token_ids, token_type_ids, attention_mask)["logits"]
+        output_logits = self(input_token_ids, token_type_ids, attention_mask)
         # output_logits =
         loss = self.compute_loss(output_logits, labels, )
 
@@ -162,7 +171,7 @@ class TNewsClassificationTask(pl.LightningModule):
     def validation_step(self, batch, batch_idx):
         output = {}
         input_token_ids, token_type_ids, attention_mask, gold_labels = batch
-        output_logits = self(input_token_ids, token_type_ids, attention_mask)["logits"]
+        output_logits = self(input_token_ids, token_type_ids, attention_mask)
         loss = self.compute_loss(output_logits, gold_labels)
         pred_labels = self._transform_logits_to_labels(output_logits)
         stats_confusion_matrix = self.metric_f1.forward(pred_labels, gold_labels)

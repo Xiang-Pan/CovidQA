@@ -13,7 +13,7 @@ TASK_NAME=covidq_cls
 DATA_DIR=$REPO_PATH/task_datasets/$TASK_NAME
 
 #! BERT VERSION
-BERT_TYPE=roberta-base
+BERT_TYPE=roberta_squad1_2epoch
 BERT_DIR=$REPO_PATH/cached_models/$BERT_TYPE
 
 TRAIN_BATCH_SIZE=36
