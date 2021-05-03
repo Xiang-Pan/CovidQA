@@ -96,7 +96,6 @@ for epoch in number_epochs:
 
 
 
-
 # # after training, use the model checkpoint which achieves the best f1 score on dev set to compute the f1 on test set.
 # best_f1_on_dev, path_to_best_checkpoint = find_best_checkpoint_on_dev(args.output_dir,only_keep_the_best_ckpt=args.only_keep_the_best_ckpt_after_training)
 # task_model.result_logger.info("=&" * 20)
