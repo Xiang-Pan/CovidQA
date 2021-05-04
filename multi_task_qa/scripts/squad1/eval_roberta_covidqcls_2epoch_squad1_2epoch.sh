@@ -1,3 +1,4 @@
+
 #!/usr/bin/env bash
 # -*- coding: utf-8 -*-
 
@@ -15,12 +16,12 @@ TASK_NAME=squad1
 # MODEL_CKPT=${OUTPUT_DIR}/epoch=1.ckpt
 
 
-MODEL_CKPT=$REPO_PATH/cached_models/roberta_covidmlm_train_and_dev_3epoch_squad1_2epoch/roberta_covidmlm_train_and_dev_3epoch_squad1_2epoch.ckpt
+MODEL_CKPT=$REPO_PATH/cached_models/roberta_covidqcls_3epoch_squad1_2epoch/roberta_covidqcls_3epoch_squad1_2epoch.ckpt
 
-HPARAMS_PATH=${REPO_PATH}/outputs/roberta_covidmlm_train_and_dev_3epoch/squad1/lightning_logs/version_1/hparams.yaml
+HPARAMS_PATH=${REPO_PATH}/cached_models/roberta_covidqcls_3epoch_squad1_2epoch/eval_covidqa_hparams.yaml
 
 # CUDA_VISIBLE_DEVICES=3 
-python ${REPO_PATH}/tasks/squad/evaluate_models_mlm.py \
+python ${REPO_PATH}/tasks/squad/evaluate_models.py \
 --gpus="0," \
 --path_to_model_checkpoint ${MODEL_CKPT} \
 --path_to_model_hparams_file ${HPARAMS_PATH}

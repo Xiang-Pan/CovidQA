@@ -89,7 +89,7 @@ cls_trainer = Trainer.from_argparse_args(
     checkpoint_callback=checkpoint_callback,
     deterministic=True
 )
-
+number_epochs = 3
 for epoch in number_epochs:
     cls_trainer.fit(cls_model,max_step = 1,max_steps = 20)
     squad_trainer.fit(qa_model, max_epochs = 1,max_steps = 20)

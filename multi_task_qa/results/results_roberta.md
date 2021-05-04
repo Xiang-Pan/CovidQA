@@ -62,13 +62,34 @@ DATALOADER:0 TEST RESULTS
 | squad1 + covidqcls     | CovidQA(42.15)        |
 
 
+# eval_roberta_covidmlm_train_and_dev_3epoch_squad1_2epoch.sh
+DATALOADER:0 TEST RESULTS
+{'exact_match': 26.980198019801982,
+ 'span_f1': 47.21909464454658,
+ 'val_loss': tensor(0.3078, device='cuda:0')}
 
 
+# eval_roberta_covidqcls_2epoch_squad1_2epoch.sh
+DATALOADER:0 TEST RESULTS
+{'exact_match': 24.504950495049506,
+ 'span_f1': 42.63095745750584,
+ 'val_loss': tensor(0.3370, device='cuda:0')}
 <!-- | squad1 + DAPT   | CovidQA(28.84)        |
 |ace_2004(MRC_NER span_f1:0.6681)|CovidQA(2.27)|
 |ace_2004_BERT + squad1_classifier|CovidQA(3.21)|
 |ace_2004 + squad1(share BERT)| - | -->
 <!-- | CovidQA(43.27)      |  CovidQA(43.27)    | -->
+
+# ./scripts/squad1/eval_roberta_covidmlm_train_and_dev_3epoch_covidqcls_4epoch_squad1_2epoch.sh
+{'exact_match': 28.217821782178216,
+ 'span_f1': 45.83140108364576,
+ 'val_loss': tensor(0.3080, device='cuda:0')}
+
+# ./scripts/squad1/eval_roberta_covidmlm_train_and_dev_3epoch_covidqcls_4epoch_squad1_1epoch.sh
+DATALOADER:0 TEST RESULTS
+{'exact_match': 19.059405940594058,
+ 'span_f1': 32.95114123284045,
+ 'val_loss': tensor(3.7847, device='cuda:0')}
 
 # resources
 https://github.com/JerryWei03/COVID-Q
