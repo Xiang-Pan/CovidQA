@@ -1,0 +1,38 @@
+{
+    "os": "Linux-5.9.16-1-MANJARO-x86_64-with-glibc2.10",
+    "python": "3.8.8",
+    "heartbeatAt": "2021-05-14T01:03:43.176170",
+    "startedAt": "2021-05-14T01:03:41.314730",
+    "docker": null,
+    "gpu": "GeForce RTX 3090",
+    "gpu_count": 1,
+    "cpu_count": 20,
+    "cuda": null,
+    "args": [
+        "--model_name_or_path",
+        "./cached_models/roberta_covidmlm_train_and_dev_3epoch",
+        "--train_file",
+        "task_datasets/covidner/train.json",
+        "--validation_file",
+        "task_datasets/covidner/dev.json",
+        "--test_file",
+        "task_datasets/covidner/test.json",
+        "--output_dir",
+        "./outputs/roberta_covidmlm_train_and_dev_3epoch/covidner",
+        "--do_train",
+        "--do_eval",
+        "--do_predict"
+    ],
+    "state": "running",
+    "program": "./tasks/ner/run_ner.py",
+    "codePath": "multi_task_qa/tasks/ner/run_ner.py",
+    "git": {
+        "remote": "https://github.com/Xiang-Pan/CovidQA",
+        "commit": "8de1d6552c8544e4e5cf978cb1f3652cf9040221"
+    },
+    "email": "xiangpan@nyu.edu",
+    "root": "/home/xiangpan/Labs/CovidQA",
+    "host": "manjaro",
+    "username": "xiangpan",
+    "executable": "/home/xiangpan/.conda/envs/pytorch/bin/python"
+}
