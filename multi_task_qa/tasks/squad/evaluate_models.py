@@ -63,7 +63,7 @@ def main():
     eval_parser = BertForQA.add_model_specific_args(eval_parser)
     eval_parser = Trainer.add_argparse_args(eval_parser)
     args = eval_parser.parse_args()
-    print("here",args.path_to_model_checkpoint)
+    # print("here",args.path_to_model_checkpoint)
     if len(args.path_to_model_hparams_file) == 0:
         args.path_to_model_hparams_file = os.path.join("/".join(args.path_to_model_checkpoint.split("/")[:-1]), "lightning_logs", "version_0", "hparams.yaml")
 

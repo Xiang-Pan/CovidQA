@@ -34,8 +34,8 @@ from task_datasets.squad_dataset import SquadDataset
 from task_datasets.truncate_dataset import TruncateDataset
 from metrics.squad_em_f1 import SquadEvalMetric
 
-from models.model_config import BertForQueryNERConfig
-from models.bert_query_ner import BertForQueryNER
+# from models.model_config import BertForQueryNERConfig
+# from models.bert_query_ner import BertForQueryNER
 
 
 class BertForQA(pl.LightningModule):
@@ -49,9 +49,10 @@ class BertForQA(pl.LightningModule):
             self.save_hyperparameters(args)
             self.args = args
         else:
+            print(args.keys())
             TmpArgs = namedtuple("tmp_args", field_names=list(args.keys()))
             self.args = args = TmpArgs(**args)
-
+        print(args,"here")
         self.model_path = args.bert_config_dir
         self.data_dir = args.data_dir
         self.loss_type = args.loss_type
@@ -351,6 +352,7 @@ def main():
     # add all the available trainer options to argparse
     parser = Trainer.add_argparse_args(parser)
     args = parser.parse_args()
+    print(args,"init")
 
     model = BertForQA(args)
 
